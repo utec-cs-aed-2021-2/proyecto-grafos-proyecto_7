@@ -4,9 +4,9 @@
 --------
 
 ## Integrantes
-- 
-- 
-- 
+- Juan Diego Laredo
+- Jeremy Matos
+- Diego Guerra
 
 ----
 
