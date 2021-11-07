@@ -5,13 +5,13 @@
 
 template<typename TV, typename TE>
 class UnDirectedGraph : public Graph<TV, TE>{
-    
+        
     public:
         UnDirectedGraph() = default;
-        
-        ~UnDirectedGraph();
 
-        int numEdges = 0;
+        ~UnDirectedGraph() = default;       // realese memory
+
+
 
         UnDirectedGraph(string id, TV vertex){
             this->insertVertex(id, vertex);
@@ -45,7 +45,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
             this->vertexes[id1]->edges.push_back(newEdge1);
             this->vertexes[id2]->edges.push_back(newEdge2);            
             
-            numEdges++;
+            this->numEdges++;
             
             return true;
         };
@@ -77,6 +77,44 @@ class UnDirectedGraph : public Graph<TV, TE>{
         bool empty(){
             return this->vertexes.size() == 0;
         }
+
+
+        float density(){
+            return (2 * this->numEdges)/(this->numVertexes * (this->numVertexes - 1));
+        }
+
+        bool isDense(float threshold = 0.5){
+            return this->density() > threshold;
+        } 
+
+        bool isConnected(){
+            // visited array & first vertex to launch DFS/BFS
+            unordered_map<Vertex<TV, TE>*, bool> visited;     
+            Vertex<TV, TE>* inVertex = nullptr;
+
+            // initialize visited array
+            for (auto [id, ver] : this->vertexes)
+            {   
+                visited[ver] = false; 
+                inVertex = ver;
+            }      
+                
+            // launch DFS/BFS
+            DFS(inVertex, [&visited](Vertex<TV, TE>* ver){
+                visited[ver] = true;
+            });
+
+            // check if there is a node that was not visited
+            for (auto [ver, vis] : visited)
+                if (!vis)
+                    return false;
+            return true;
+        }
+
+        bool isStronglyConnected(){
+            return this->isConnected();
+        }
+        
 };
 
 #endif
