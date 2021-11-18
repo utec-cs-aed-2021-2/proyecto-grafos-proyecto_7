@@ -7,7 +7,9 @@
 #include <iostream>
 #include <stack>
 #include <queue>
-
+#include <string>
+#include <iterator>
+#include <algorithm>
 using namespace std;
 
 template<typename TV, typename TE>
@@ -19,6 +21,9 @@ struct Vertex;
 template<typename TV, typename TE>
 class Graph;
 
+template<typename TV, typename TE>
+using umap_it = typename unordered_map<string, Vertex<TV, TE>*>::iterator;
+
 //////////////////////////////////////////////////////
 
 template<typename TV, typename TE>
@@ -29,8 +34,8 @@ struct Edge {
     Edge() = default;
     Edge(Vertex<TV, TE>* source, Vertex<TV, TE>* destiny, TE w)
     {
-        this->vertexes[0] = source;
-        this->vertexes[1] = destiny;
+        this->edgeVertexes[0] = source;
+        this->edgeVertexes[1] = destiny;
         this->weight = w;
     }
 };
@@ -39,7 +44,7 @@ template<typename TV, typename TE>
 struct Vertex {
     TV data;
     std::list<Edge<TV, TE>*> edges;
-
+    Vertex() = default;
     Vertex(TV d):data{d}{};
 
     // add an edge in a graph 
@@ -58,7 +63,11 @@ struct Vertex {
 
 template<typename TV, typename TE>
 class Graph{
-private:    
+    template<typename TV1, typename TE1> friend class DFS;
+    template<typename TV2, typename TE2> friend class BFS;
+    template<typename TV3, typename TE3> friend class Kruskal;
+    template<typename TV4, typename TE4> friend class Prim;
+protected:
     std::unordered_map<string, Vertex<TV, TE>*>  vertexes;
     int numEdges = 0;
     int numVertexes = 0;
@@ -66,7 +75,7 @@ public:
     virtual bool insertVertex(string id, TV vertex) = 0;   
     virtual bool createEdge(string id1, string id2, TE w) = 0;     
     virtual bool deleteVertex(string id) = 0;     
-    virtual bool deleteEdge(string id) = 0;   
+    virtual bool deleteEdge(string id1, string id2) = 0;   
     virtual TE &operator()(string start, string end)= 0;  
     virtual float density() = 0;
     virtual bool isDense(float threshold = 0.5) = 0;
