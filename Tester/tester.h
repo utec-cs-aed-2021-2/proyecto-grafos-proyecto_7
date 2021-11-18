@@ -56,11 +56,16 @@ namespace Tester
 	    string fname = "Tester/test_kruskal_undirected_1.txt";
 	    FEngine.insertElementsInGraph(fname, &TGraph);
 	    
-	    TGraph.displayVertex("A");
-	    TGraph.deleteVertex("A");
-	    TGraph.display();
-	    //TGraph.deleteEdge("E", "F");
-	    TGraph.display();
+	    //TGraph.displayVertex("A");
+	    //TGraph.adjList();
+	    //TGraph.deleteVertex("A");
+	    //TGraph.adjList();
+	    //TGraph.adjList();
+	    //TGraph.deleteEdge("A", "B");
+	    //TGraph.deleteEdge("D", "B");
+	    TGraph.adjList();
+	    cout << boolalpha << TGraph.isConnected();
+	    //TGraph.display();
 	}
 }
 
