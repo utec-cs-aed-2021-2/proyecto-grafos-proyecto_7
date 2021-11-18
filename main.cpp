@@ -1,17 +1,11 @@
-#include <iostream>
-
-//#include "Tester/tester.h"
-//#include "Parser/parser.h"
-#include "Graph/DirectedGraph.h"
-#include "Graph/UndirectedGraph.h"
-
-using namespace std;
+#include "Tester/tester.h"
+#include "Parser/parser.h"
 
 int main(int argc, char *argv[]) {
-    std::cout << "================================================" << std::endl;
-    std::cout << "MENU GRAPH TESTER" << std::endl;
-    std::cout << "================================================" << std::endl;
-    
+#ifndef TEST
+    freopen("output.txt", "w", stdout);
+#endif
+    Tester::runMenu();
     //Tester::executeExamples();
     //Tester::executeParser();
     
