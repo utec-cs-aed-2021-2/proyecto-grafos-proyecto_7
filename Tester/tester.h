@@ -52,7 +52,7 @@ namespace Tester
 	    cout << "MENU GRAPH TESTER" << endl;
 	    cout << "================================================" << endl;
 	    FileReader<tK, tV> FEngine;
-	    UnDirectedGraph<tK, tV> TGraph;
+	    DirectedGraph<tK, tV> TGraph;
 	    string fname = "Tester/test_kruskal_undirected_1.txt";
 	    FEngine.insertElementsInGraph(fname, &TGraph);
 	    
@@ -64,8 +64,12 @@ namespace Tester
 	    //TGraph.deleteEdge("A", "B");
 	    //TGraph.deleteEdge("D", "B");
 	    TGraph.adjList();
-	    cout << boolalpha << TGraph.isConnected();
+	    //cout << boolalpha << TGraph.isConnected();
 	    //TGraph.display();
+	    cout << TGraph("D", "F") << endl;
+	    TGraph.deleteEdge("D", "C");
+	    TGraph.deleteVertex("E");
+	    TGraph.adjList();
 	}
 }
 
