@@ -135,7 +135,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
 
         bool empty()
         {
-            return this->vertexes.size() == 0;
+            return this->numEdges == 0 && this->numVertexes == 0;
         }
 
         void clear()
