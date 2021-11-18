@@ -3,14 +3,20 @@
 
 #include "..\graph.h"
 
-template<typename TV, TE>
+template<typename TV, typename TE>
 class Prim{
+public:
+	Prim(Graph<TV, TE>* graph)
+	{
+
+	}
+
 	Prim(Graph<TV, TE>* graph, TV root)
 	{
 
 	}
 
-	Graph<TV, TE> apply()
+	void apply()
 	{
 		
 	}

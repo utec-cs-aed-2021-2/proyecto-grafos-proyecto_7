@@ -3,7 +3,7 @@
 
 #include "..\graph.h"
 
-template<typename TV, TE>
+template<typename TV, typename TE>
 class AStar{
 	AStar(Graph<TV, TE>* graph, TV start, TV end, vector<TE> heuristics)
 	{
@@ -14,6 +14,6 @@ class AStar{
 	{
 		
 	}
-}
+};
 
 #endif

@@ -41,6 +41,13 @@ struct Edge {
 };
 
 template<typename TV, typename TE>
+ostream& operator << (ostream& os, Edge<TV, TE>* ed)
+{
+    os << " ("<< ed->edgeVertexes[0]->data << " " << ed->weight << " " << ed->edgeVertexes[1]->data << ")";
+    return os;
+}
+
+template<typename TV, typename TE>
 struct Vertex {
     TV data;
     std::list<Edge<TV, TE>*> edges;
@@ -87,7 +94,7 @@ public:
     virtual void displayVertex(string id) = 0;
     virtual bool findById(string id) = 0;
     virtual void display() = 0;
-
+    virtual void adjList() = 0;
     ~Graph() = default;
 };
 

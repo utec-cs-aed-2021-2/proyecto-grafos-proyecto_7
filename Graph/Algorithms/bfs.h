@@ -20,6 +20,20 @@ public:
 		//for (auto [k, v] : visited)
 		//	cout << k->data << " -> " << v << endl;
 	}
+
+	BFS(Graph<TV, TE>* graph, TV dataId)
+	{
+		auto un_map = graph->vertexes;
+		for (auto [k, v] : un_map)
+		{
+			if (v->data == dataId)
+				this->startV = v;
+			this->visited[v] = false;
+		}
+		//for (auto [k, v] : visited)
+		//	cout << k->data << " -> " << v << endl;
+	}
+
 	BFS(umap_it<TV, TE> start, umap_it<TV, TE> end, Vertex<TV, TE>* startVertex = nullptr)
 	{
 		if (startVertex == nullptr)			// set first vertex
