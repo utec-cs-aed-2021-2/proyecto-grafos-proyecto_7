@@ -33,13 +33,13 @@ class UnDirectedGraph : public Graph<TV, TE>{
                 return false;
             }
             Edge<TV,TE>* newEdge1 = new Edge<TV,TE>;
-            newEdge1->vertexes[0] = this->vertexes[id1];
-            newEdge1->vertexes[1] = this->vertexes[id2];
+            newEdge1->edgeVertexes[0] = this->vertexes[id1];
+            newEdge1->edgeVertexes[1] = this->vertexes[id2];
             newEdge1->weight = w;
 
             Edge<TV,TE>* newEdge2 = new Edge<TV,TE>;
-            newEdge2->vertexes[1] = this->vertexes[id1];
-            newEdge2->vertexes[0] = this->vertexes[id2];
+            newEdge2->edgeVertexes[1] = this->vertexes[id1];
+            newEdge2->edgeVertexes[0] = this->vertexes[id2];
             newEdge2->weight = w;
 
             this->vertexes[id1]->edges.push_back(newEdge1);
@@ -64,7 +64,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
             auto aristas = this->vertexes[start]->edges; //std::list<Edge<TV, TE>*> //no se si el tipo es eso, falta probar
             for (auto it : aristas){
                 //revisa cada par de vertices
-                if (it->vertexes[0] == this->vertexes[end] || it->vertexes[1] == this->vertexes[end]){
+                if (it->edgeVertexes[0] == this->vertexes[end] || it->vertexes[1] == this->vertexes[end]){
                     //si es que encuentra una donde este el vertice end
                     return it->weight;
                 }
