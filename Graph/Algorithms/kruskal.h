@@ -27,7 +27,7 @@ public:
 	}
 	~Kruskal()
 	{
-		vEdges.clear(); posVertex.clear();
+		vEdges.clear(); posVertex.clear(); vNodes.clear();
 	}
 
 	UnDirectedGraph<TV, TE> apply()
