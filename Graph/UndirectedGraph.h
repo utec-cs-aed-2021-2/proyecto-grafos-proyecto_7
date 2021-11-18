@@ -132,7 +132,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
             for(auto &i: this->vertexes){
                 if(i.first == id)
                     for(auto &j:i.second->edges){
-                        cout << j->vertexes[0]->data << "-" << j->vertexes[1]->data << ", weight: " << j->weight<< endl;
+                        cout << j->edgeVertexes[0]->data << "-" << j->edgeVertexes[1]->data << ", weight: " << j->weight<< endl;
                     }
             }
         }
@@ -141,7 +141,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
             for(auto &i: this->vertexes){
                 cout << "Para el vertice " << i.first << " :" << endl;
                 for(auto &j:i.second->edges){
-                    cout << j->vertexes[0]->data << "-" << j->vertexes[1]->data << ", weight: " << j->weight << endl;
+                    cout << j->edgeVertexes[0]->data << "-" << j->edgeVertexes[1]->data << ", weight: " << j->weight << endl;
                 }
                 cout << endl;
             }
