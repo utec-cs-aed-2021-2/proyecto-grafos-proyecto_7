@@ -23,7 +23,7 @@ class Graph;
 
 template<typename TV, typename TE>
 struct Edge {
-    Vertex<TV, TE>* vertexes[2];    
+    Vertex<TV, TE>* edgeVertexes[2];    
     TE weight;
 
     Edge() = default;
