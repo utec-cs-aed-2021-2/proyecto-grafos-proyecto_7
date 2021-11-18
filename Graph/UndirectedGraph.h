@@ -21,7 +21,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
             if (this->vertexes.find(id) != this->vertexes.end()){
                 return false; //encuentra otro vertice con el mismo id
             }
-            Vertex<TV,TE>* newVertex = new Vertex<TV,TE>;
+            Vertex<TV,TE>* newVertex = new Vertex<TV,TE>();
             newVertex->data = vertex;
             this->vertexes[id] = newVertex;
 
@@ -100,9 +100,9 @@ class UnDirectedGraph : public Graph<TV, TE>{
             }      
                 
             // launch DFS/BFS
-            DFS(inVertex, [&visited](Vertex<TV, TE>* ver){
-                visited[ver] = true;
-            });
+            //DFS(inVertex, [&visited](Vertex<TV, TE>* ver){
+            //    visited[ver] = true;
+            //});
 
             // check if there is a node that was not visited
             for (auto [ver, vis] : visited)
@@ -115,9 +115,37 @@ class UnDirectedGraph : public Graph<TV, TE>{
             return this->isConnected();
         }
         
+        bool deleteVertex(string id){
+            return true;
+        }
 
+        bool deleteEdge(string id1, string id2){
+            return true;
+        }
 
+        void clear()
+        {
 
+        }
+      
+        void displayVertex(string id){
+            for(auto &i: this->vertexes){
+                if(i.first == id)
+                    for(auto &j:i.second->edges){
+                        cout << j->vertexes[0]->data << "-" << j->vertexes[1]->data << ", weight: " << j->weight<< endl;
+                    }
+            }
+        }
+
+        void display(){
+            for(auto &i: this->vertexes){
+                cout << "Para el vertice " << i.first << " :" << endl;
+                for(auto &j:i.second->edges){
+                    cout << j->vertexes[0]->data << "-" << j->vertexes[1]->data << ", weight: " << j->weight << endl;
+                }
+                cout << endl;
+            }
+        }
         // cambio local 
 };
 
