@@ -133,6 +133,9 @@ class UnDirectedGraph : public Graph<TV, TE>{
             return false;
         }
 
+        bool isStronglyConnected(){ 
+            throw std::runtime_error("funcion invalida\n");
+        }
         bool empty()
         {
             return this->numEdges == 0 && this->numVertexes == 0;

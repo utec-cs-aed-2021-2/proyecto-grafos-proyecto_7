@@ -50,6 +50,11 @@ public:
 		//cout << '\n' << startVertex->data << '\n';
 	}
 
+	void setInitialVertex(Vertex<TV, TE>* startVV)
+	{
+		this->startV = startVV;
+	}
+
 	template<typename Op>
 	void run(Op op)
 	{

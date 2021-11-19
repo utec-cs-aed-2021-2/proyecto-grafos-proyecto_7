@@ -87,7 +87,7 @@ public:
     virtual float density() = 0;
     virtual bool isDense(float threshold = 0.5) = 0;
     virtual bool isConnected() = 0;
-    bool isStronglyConnected() throw();
+    virtual bool isStronglyConnected() = 0;
     virtual bool empty() = 0;
     virtual void clear() = 0;  
       

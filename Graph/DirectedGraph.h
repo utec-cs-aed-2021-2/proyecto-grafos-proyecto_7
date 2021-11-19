@@ -2,7 +2,8 @@
 #define NONDIRECTEDGRAPH_H
 
 #include "graph.h"
-
+#include "Algorithms\dfs.h"
+#include "Algorithms\bfs.h"
 template<typename TV, typename TE>
 class DirectedGraph : public Graph<TV, TE>{
 
@@ -128,14 +129,27 @@ class DirectedGraph : public Graph<TV, TE>{
             return true;
         }
 
-        bool isStronglyConnected()
-        {
-
-        }
-
         bool empty()
         {
             return this->numEdges == 0 && this->numVertexes == 0;
+        }
+
+        bool isStronglyConnected()
+        {
+            if (this->empty())
+                return false;
+
+            for (auto [k, v] : this->vertexes){
+                DFS<TV, TE> treeTraversal(this->vertexes.begin(), this->vertexes.end(), v);
+                int visitedNodes = 0;
+                treeTraversal.run([&visitedNodes](Vertex<TV, TE>* currentVertex){
+                    cout << currentVertex->data << " ";
+                    visitedNodes++;
+                }); cout << endl;
+                if (visitedNodes != this->vertexes.size())
+                    return false;
+            }
+            return true;
         }
 
         void clear()
@@ -181,3 +195,4 @@ class DirectedGraph : public Graph<TV, TE>{
 };
 
 #endif
+
