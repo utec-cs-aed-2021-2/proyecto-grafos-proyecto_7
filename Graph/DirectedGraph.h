@@ -2,7 +2,8 @@
 #define NONDIRECTEDGRAPH_H
 
 #include "graph.h"
-
+#include "Algorithms\dfs.h"
+#include "Algorithms\bfs.h"
 template<typename TV, typename TE>
 class DirectedGraph : public Graph<TV, TE>{
 
@@ -92,17 +93,63 @@ class DirectedGraph : public Graph<TV, TE>{
 
         bool isConnected()
         {
+            umap_it<TV, TE> it1 = this->vertexes.begin();
+            unordered_map<TV, bool> vis1;
+            unordered_map<TV, bool> vis2;
+            DirectedGraph<TV, TE> dgraph;
+            for (auto [k, n] : this->vertexes)
+            {
+                vis1[n->data] = vis2[n->data] = false; 
+                dgraph.insertVertex(n->data, n->data);
+            }
+            for (auto [k, n] : this->vertexes)
+            {
+                for (auto ed : n->edges)
+                    dgraph.createEdge(ed->edgeVertexes[1]->data, ed->edgeVertexes[0]->data, ed->weight);
+            }
 
-        }
+            this->adjList();
+            dgraph.adjList();
 
-        bool isStronglyConnected()
-        {
+            DFS<TV, TE> treeTraversal1(this);
+            treeTraversal1.run([&vis1](auto currentVertex){
+                vis1[currentVertex->data] = true;
+            });
 
+            DFS<TV, TE> treeTraversal2(&dgraph);
+            treeTraversal2.run([&vis2](auto currentVertex){
+                vis2[currentVertex->data] = true;
+            });
+
+            for (auto [k, v]: vis1)
+            {
+                if ( (v | vis2[k]) == false )
+                    return false;
+            }
+            return true;
         }
 
         bool empty()
         {
             return this->numEdges == 0 && this->numVertexes == 0;
+        }
+
+        bool isStronglyConnected()
+        {
+            if (this->empty())
+                return false;
+
+            for (auto [k, v] : this->vertexes){
+                DFS<TV, TE> treeTraversal(this->vertexes.begin(), this->vertexes.end(), v);
+                int visitedNodes = 0;
+                treeTraversal.run([&visitedNodes](Vertex<TV, TE>* currentVertex){
+                    cout << currentVertex->data << " ";
+                    visitedNodes++;
+                }); cout << endl;
+                if (visitedNodes != this->vertexes.size())
+                    return false;
+            }
+            return true;
         }
 
         void clear()
@@ -148,3 +195,4 @@ class DirectedGraph : public Graph<TV, TE>{
 };
 
 #endif
+

@@ -34,6 +34,11 @@ public:
 		//	cout << k->data << " -> " << v << endl;
 	}
 
+	void setInitialVertex(Vertex<TV, TE>* startVV)
+	{
+		this->startV = startVV;
+	}
+
 	DFS(umap_it<TV, TE> start, umap_it<TV, TE> end, Vertex<TV, TE>* startVertex = nullptr)
 	{
 		if (startVertex == nullptr)			// set first vertex
