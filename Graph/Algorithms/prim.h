@@ -7,7 +7,7 @@
 #include <tuple>
 using namespace std;
 
-template<typename TE>
+template<typename TE, typename TV>
 struct Compare{
     bool operator()(const tuple<TV, TE, TV>& tup1, const tuple<TV, TE, TV>& tup2){
         if(get<1>(tup1) > get<1>(tup2)){
@@ -52,7 +52,7 @@ public:
 
 	UnDirectedGraph<TV,TE>* apply()
 	{
-		priority_queue<tuple<TV, TE, TV>, vector<tuple<TV ,TE, TV>>, Compare<TE>> cont;
+		priority_queue<tuple<TV, TE, TV>, vector<tuple<TV ,TE, TV>>, Compare<TE, TV>> cont;
 		UnDirectedGraph<TV,TE>* primm = new UnDirectedGraph<TV,TE>;
 
 		primm->insertVertex(this->startV->id, this->vertices[this->startV->id]->data);
@@ -67,7 +67,7 @@ public:
             }
         }
 
-        cost = 0;
+        int cost = 0;
 
 		while (!cont.empty()){
             Vertex<TV,TE>* source = get<0>(cont.top());
