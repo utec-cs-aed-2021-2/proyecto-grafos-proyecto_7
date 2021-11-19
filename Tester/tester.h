@@ -100,6 +100,13 @@ namespace Tester
 	    		prim.apply();
 	    		break;
 	    	}
+		case 4:
+	    	{
+	    		fname = "Tester/connected_dir.txt";
+	    		FEngine.insertElementsInGraph(fname, graph);
+	    		cout << boolalpha << graph->isConnected() << endl;
+	    		//cout << boolalpha << graph->isStronglyConnected() << endl;
+	    	}
 	    	default: break;
 	    }
 	}
