@@ -163,7 +163,12 @@ class DirectedGraph : public Graph<TV, TE>{
           
         void displayVertex(string id)
         {
-
+            for(auto &i: this->vertexes){
+                if(i.first == id)
+                    for(auto &j:i.second->edges){
+                        cout << j->edgeVertexes[0]->data << "->" << j->edgeVertexes[1]->data << ", weight: " << j->weight<< endl;
+                    }
+            }
         }
 
         bool findById(string id)
@@ -175,7 +180,13 @@ class DirectedGraph : public Graph<TV, TE>{
 
         void display()
         {
-
+            for(auto &i: this->vertexes){
+                cout << "Para el vertice " << i.first << " :" << endl;
+                for(auto &j:i.second->edges){
+                    cout << j->edgeVertexes[0]->data << "->" << j->edgeVertexes[1]->data << ", weight: " << j->weight << endl;
+                }
+                cout << endl;
+            }
         }
 
         void adjList()
