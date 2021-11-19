@@ -61,7 +61,7 @@ namespace Tester
 	    cout << "3. Prim\n";
 	    cout << "================================================" << endl;
 	    //cin >> input;
-	    input = 2;
+	    input = 4;
 	    switch (input)
 	    {
 	    	case 1:
@@ -100,12 +100,12 @@ namespace Tester
 	    		prim.apply();
 	    		break;
 	    	}
-		case 4:
+	    	case 4:
 	    	{
 	    		fname = "Tester/connected_dir.txt";
 	    		FEngine.insertElementsInGraph(fname, graph);
 	    		cout << boolalpha << graph->isConnected() << endl;
-	    		//cout << boolalpha << graph->isStronglyConnected() << endl;
+	    		cout << boolalpha << graph->isStronglyConnected() << endl;
 	    	}
 	    	default: break;
 	    }
@@ -125,7 +125,7 @@ namespace Tester
 	    cout << "2. Directed\n";
 	    cout << "================================================" << endl;
 	    //cin >> typeG;
-	    typeG = 1;
+	    typeG = 2;
 	    if (typeG == 1)
 	    	runAlgorithms(ugraph);
     	else 
