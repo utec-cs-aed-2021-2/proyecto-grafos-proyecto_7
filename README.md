@@ -2,6 +2,7 @@
 # Algoritmos y Estructura de Datos
 ## Proyecto sobre Grafos
 --------
+Falta clase del algoritmo de Prim
 
 ## Integrantes
 - Juan Diego Laredo
