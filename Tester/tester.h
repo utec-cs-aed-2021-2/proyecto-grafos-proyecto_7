@@ -107,6 +107,13 @@ namespace Tester
 	    		cout << boolalpha << graph->isConnected() << endl;
 	    		cout << boolalpha << graph->isStronglyConnected() << endl;
 	    	}
+		case 5:
+            	{
+                fname = "../Tester/mst1.txt";
+                FEngine.insertElementsInGraph(fname,graph);
+                AStar<tK,tV> a(graph,"A","H");
+                a.apply();
+		}
 	    	default: break;
 	    }
 	}
