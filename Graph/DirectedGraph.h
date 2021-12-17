@@ -11,7 +11,9 @@ class DirectedGraph : public Graph<TV, TE>{
     public:
         DirectedGraph() = default;
 
-        ~DirectedGraph() = default;
+        ~DirectedGraph(){
+            this->clear();
+        };
 
         DirectedGraph(string id, TV vertex){
             this->insertVertex(id, vertex);
