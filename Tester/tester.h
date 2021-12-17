@@ -99,10 +99,11 @@ namespace Tester
 	        }
 	        case 3:
 	        {
-	            fname = "../Tester/mst3.txt";
+	            fname = "../Tester/prim.txt";
 	            FEngine.insertElementsInGraph(fname, graph);
-	            Kruskal krus(graph);
-	            krus.apply();
+	            Prim prim(graph, "A");
+	            auto a = prim.apply();
+		    a->adjList();
 	            break;
 	        }
 	        case 4:
@@ -184,10 +185,11 @@ namespace Tester
 	        }
 	        case 3:
 	        {
-	            fname = "../Tester/mst3.txt";
+	            fname = "../Tester/prim.txt";
 	            FEngine.insertElementsInGraph(fname, graph);
-	            Kruskal krus(graph);
-	            krus.apply();
+	            Prim prim(graph, "A");
+	            auto a = prim.apply();
+		    a->adjList();
 	            break;
 	        }
 	        case 4:
