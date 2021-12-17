@@ -1,97 +1,187 @@
 #ifndef PRIM_H
 #define PRIM_H
 
-#include "..\graph.h"
+#include "../graph.h"
 #include "../UndirectedGraph.h"
-#include "queue"
-#include <tuple>
+#include "../DirectedGraph.h"
+
+#include <map>
+#include <queue>
+#include <vector>
 using namespace std;
 
-template<typename TE, typename TV>
-struct Compare{
-    bool operator()(const tuple<TV, TE, TV>& tup1, const tuple<TV, TE, TV>& tup2){
-        if(get<1>(tup1) > get<1>(tup2)){
-            return true;
-        }
-        return false;
+using peso = double;
+//peso, start y end 
+using weightPar = pair<peso, pair<string, string>>; 
+
+struct ComparatorPrim{
+    bool operator()(const weightPar w1, const weightPar w2) const {
+        return w1.first > w2.first;
     }
 };
+
 
 template<typename TV, typename TE>
 class Prim{
 private:
-	unordered_map<string, Vertex<TV, TE>*> vertices;
-	unordered_map<Vertex<TV, TE>* , bool> visited;
-	Vertex<TV, TE>* startV;
-    int costo;
+	int costo;
+	UnDirectedGraph<TV,TE>* outGraph;
+   
 public:
 	Prim() = default;
-	Prim(UnDirectedGraph<TV, TE>* graph)
+	Prim(UnDirectedGraph<TV, TE>* graph, string start)
 	{
-		vertices = graph->vertexes;
-		this->startV = (vertices.begin())->first;
-		for (auto [k, v] : vertices)
-			this->visited[v] = false;
+		if (!(graph->findById(start))) throw std::invalid_argument("node not found\n");
+
+		priority_queue<weightPar,vector<weightPar>, ComparatorPrim> pq;        
+		unordered_map<string, bool> visitados;
+		
+		for (auto i : graph->vertexes){
+            visitados[i.first] = false;
+        }
+		outGraph = new UnDirectedGraph<TV,TE>;
+
+		visitados[start] = true;
+		outGraph->insertVertex(start, graph->vertexes[start]->data);
+
+		Vertex<TV,TE>* auxVert = graph->vertexes[start];
+
+		for(auto currEdge: auxVert->edges){
+			Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+			if(visitados[currVert->id] == false){
+				pq.push(make_pair(currEdge->weight, make_pair(start,currVert->id)));
+			}
+		}
+		costo = 0;
+
+		while(!pq.empty()){
+			string idS = pq.top().second.first;
+			string idF = pq.top().second.second;
+			auto peso = pq.top().first;
+
+			pq.pop();
+
+			if(visitados[idF] == false){
+				costo += peso;
+				visitados[idF] = true;
+				outGraph->insertVertex(idF, graph->vertexes[idF]->data);
+				outGraph->createEdge(idS, idF, peso);
+				Vertex<TV,TE>* vertStart = graph->vertexes[idF];
+				for (auto currEdge: vertStart->edges){
+					Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+					if (visitados[currVert->id] == false){
+						pq.push(make_pair(currEdge->weight, make_pair(vertStart->id, currVert->id)));
+					}
+				}
+			}
+		}
 	}
 
-	Prim(UnDirectedGraph<TV, TE>* graph, Vertex<TV, TE>* startVertex = nullptr)
+	Prim(DirectedGraph<TV, TE>* graph, string start)
 	{
-		vertices = graph->vertexes;
-		if (startVertex == nullptr)			// set first vertex
-			startVertex = (vertices.begin())->second;		
-		this->startV = startVertex;
+		if (!(graph->findById(start))) throw std::invalid_argument("node not found\n");
 
-		auto vertexInicio = vertices.begin();
-		while (vertexInicio != vertices.end())				// iterate over all [k, v] in unordered_map
-		{
-			Vertex<TV, TE>* vertexIt = vertexInicio->second;
-			this->visited[vertexIt] = false;		// initialize all as unvisited
-			vertexInicio = next(vertexInicio);
-		}	
+		priority_queue<weightPar,vector<weightPar>, ComparatorPrim> pq;        
+		unordered_map<string, bool> visitados;
+		for (auto i : graph->vertexes){
+            visitados[i.first] = false;
+        }
+		outGraph = new UnDirectedGraph<TV,TE>;	
+
+		visitados[start] = true;
+		outGraph->insertVertex(start, graph->vertexes[start]->data);
+
+		Vertex<TV,TE>* auxVert = graph->vertexes[start];
+
+		for(auto currEdge: auxVert->edges){
+			Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+			if(visitados[currVert->id] == false){
+				pq.push(make_pair(currEdge->weight, make_pair(start,currVert->id)));
+			}
+		}
+		costo = 0;
+
+		while(!pq.empty()){
+			string idS = pq.top().second.first;
+			string idF = pq.top().second.second;
+			auto peso = pq.top().first;
+
+			pq.pop();
+
+			if(visitados[idF] == false){
+				costo += peso;
+				visitados[idF] = true;
+				outGraph->insertVertex(idF, graph->vertexes[idF]->data);
+				outGraph->createEdge(idS, idF, peso);
+				Vertex<TV,TE>* vertStart = graph->vertexes[idF];
+
+				for (auto currEdge: vertStart->edges){
+					Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+					if (visitados[currVert->id] == false){
+						pq.push(make_pair(currEdge->weight, make_pair(vertStart->id, currVert->id)));
+					}
+				}
+			}
+		}
+	}
+
+	Prim(Graph<TV, TE>* graph, string start)
+	{
+		if (!(graph->findById(start))) throw std::invalid_argument("node not found\n");
+
+		priority_queue<weightPar,vector<weightPar>, ComparatorPrim> pq;        
+		unordered_map<string, bool> visitados;
+		for (auto i : graph->vertexes){
+            visitados[i.first] = false;
+        }
+		outGraph = new UnDirectedGraph<TV,TE>;	
+
+		visitados[start] = true;
+		outGraph->insertVertex(start, graph->vertexes[start]->data);
+
+		Vertex<TV,TE>* auxVert = graph->vertexes[start];
+
+		for(auto currEdge: auxVert->edges){
+			Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+			if(visitados[currVert->id] == false){
+				pq.push(make_pair(currEdge->weight, make_pair(start,currVert->id)));
+			}
+		}
+		costo = 0;
+
+		while(!pq.empty()){
+			string idS = pq.top().second.first;
+			string idF = pq.top().second.second;
+			auto peso = pq.top().first;
+
+			pq.pop();
+
+			if(visitados[idF] == false){
+				costo += peso;
+				visitados[idF] = true;
+				outGraph->insertVertex(idF, graph->vertexes[idF]->data);
+				outGraph->createEdge(idS, idF, peso);
+				Vertex<TV,TE>* vertStart = graph->vertexes[idF];
+
+				for (auto currEdge: vertStart->edges){
+					Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+					if (visitados[currVert->id] == false){
+						pq.push(make_pair(currEdge->weight, make_pair(vertStart->id, currVert->id)));
+					}
+				}
+			}
+		}
+	}
+
+	int primmCosto(){
+		return costo;
 	}
 
 	UnDirectedGraph<TV,TE>* apply()
 	{
-		priority_queue<tuple<TV, TE, TV>, vector<tuple<TV ,TE, TV>>, Compare<TE, TV>> cont;
-		UnDirectedGraph<TV,TE>* primm = new UnDirectedGraph<TV,TE>;
-
-		primm->insertVertex(this->startV->id, this->vertices[this->startV->id]->data);
-		visited[this->startV] = true;
-
-
-        Vertex<TV,TE>* temp = this->vertices[this->startV->id];
-        for(auto i: temp->edges){
-            Vertex<TV,TE>* auxiliar = i->vertexes[1];
-			if(visited.find(auxiliar) == visited.end()){
-                cont.push(make_tuple(i->data,i->weight,auxiliar->data));
-            }
-        }
-
-        int cost = 0;
-
-		while (!cont.empty()){
-            Vertex<TV,TE>* source = get<0>(cont.top());
-            Vertex<TV,TE>* destiny = get<2>(cont.top());
-            int costSD  = get<1>(cont.top());
-            cont.pop();
-
-            if(visited.find(destiny) == visited.end()){
-                cost += costSD;
-                visited[destiny] = true;
-				primm->insertVertex(destiny->id, vertices[destiny->id]->data);
-                primm->createEdge(source->id, destiny->id, costSD);
-				Vertex<TV,TE>* tmp = vertices[destiny->id];
-
-				for(auto i: tmp->edges){
-                    Vertex<TV,TE>* aux = i->vertexes[1];
-                    if(visited.find(aux) == visited.end()){
-                        cont.push(make_tuple(destiny->id, i->weight, aux->id));
-                    }
-                }
-            }
-        }
-		return primm;
+		return outGraph;
 	}
+
 };
 
 #endif
