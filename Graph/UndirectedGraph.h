@@ -29,6 +29,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
             newVertex->data = vertex;
             newVertex->id = id;
             this->vertexes[id] = newVertex;
+            this->numVertexes++;
             return true;
         }
 
