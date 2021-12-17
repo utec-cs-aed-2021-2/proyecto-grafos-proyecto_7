@@ -15,6 +15,26 @@ private:
     //unordered_map<vector<TV,TE>*,int>heuristica;
 public:
 	AStar(Graph<TV, TE>* graph, TV start, TV end)//, unordered_map<Vertex<TV,TE>*,int>_heuristica)
+    {
+        auto un_map = graph->vertexes;
+        this->startV = graph->vertexes[start];
+        this->endV = graph->vertexes[end];
+        //this->heuristica = _heuristica;
+        for (auto [k, v] : un_map) {
+            this->visited[v] = false;
+            this->costo[v] = 0;
+            if(v == startV){
+                for(auto &i:v->edges){
+                    auto tmp = i->edgeVertexes[1];
+                    hijo_padre[tmp] = v;
+                    this->costo[tmp] = i->weight; //+ heuristica[tmp];
+                }
+            }
+        }
+        //for (auto [k, v] : visited)
+        //	cout << k->data << " -> " << v << endl;
+    }
+	AStar(UnDirectedGraph<TV, TE>* graph, TV start, TV end)//, unordered_map<Vertex<TV,TE>*,int>_heuristica)
 	{
 		auto un_map = graph->vertexes;
 		this->startV = graph->vertexes[start];
@@ -34,6 +54,26 @@ public:
 		//for (auto [k, v] : visited)
 		//	cout << k->data << " -> " << v << endl;
 	}
+    AStar(DirectedGraph<TV, TE>* graph, TV start, TV end)//, unordered_map<Vertex<TV,TE>*,int>_heuristica)
+    {
+        auto un_map = graph->vertexes;
+        this->startV = graph->vertexes[start];
+        this->endV = graph->vertexes[end];
+        //this->heuristica = _heuristica;
+        for (auto [k, v] : un_map) {
+            this->visited[v] = false;
+            this->costo[v] = 0;
+            if(v == startV){
+                for(auto &i:v->edges){
+                    auto tmp = i->edgeVertexes[1];
+                    hijo_padre[tmp] = v;
+                    this->costo[tmp] = i->weight; //+ heuristica[tmp];
+                }
+            }
+        }
+        //for (auto [k, v] : visited)
+        //	cout << k->data << " -> " << v << endl;
+    }
     Vertex<TV,TE>* less_cost_node(){
         int menor,n=0;
         auto tmp = startV;
