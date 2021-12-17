@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
     Tester::runMenu();
     Tester::executeExamples();
     Tester::executeParser();
+
     parser Parser;
     Parser.readJSON();
 

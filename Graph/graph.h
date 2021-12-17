@@ -74,6 +74,11 @@ class Graph{
     template<typename TV2, typename TE2> friend class BFS;
     template<typename TV3, typename TE3> friend class Kruskal;
     template<typename TV4, typename TE4> friend class Prim;
+    template<typename TV5, typename TE5> friend class AStar;
+    template<typename TV6, typename TE6> friend class Dijkstra;
+    template<typename TV7, typename TE7> friend class BestBFS;
+    template<typename TV8, typename TE8> friend class BellmanFord;
+    template<typename TV9, typename TE9> friend class FloydWarshall;
 protected:
     std::unordered_map<string, Vertex<TV, TE>*>  vertexes;
     int numEdges = 0;

@@ -26,4 +26,4 @@ add_executable(proyecto_grafos_proyecto_7
         Tester/tester.h
         Parser/nlohmann/json.hpp
         main.cpp
-)
+        Graph/Algorithms/bellmanFord.h Graph/Algorithms/floydWarshall.h Graph/Algorithms/bestBFS.h)

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <errno.h>
+#include <cerrno>
 #include <string>
 #include "../Graph/DirectedGraph.h"
 #include "../Graph/UndirectedGraph.h"
