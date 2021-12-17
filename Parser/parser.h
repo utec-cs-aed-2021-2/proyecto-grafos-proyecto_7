@@ -26,12 +26,12 @@ public:
             //std::cout << *it << endl;     // print the entire object
             for (auto& [key, value]: it->items())
             {
-                if (key != "destinations")
-                    std::cout << key << " ";
+                //if (key != "destinations")
+                //    std::cout << key << " ";
                 //if (key == "Longitude")
                 //    this->longitude = value;
             }
-            std::cout << endl;
+            //std::cout << endl;
         }
     }
 };

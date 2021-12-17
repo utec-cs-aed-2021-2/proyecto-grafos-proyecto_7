@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 #include <unordered_map>
+#include <map>
 #include <iostream>
 #include <stack>
 #include <queue>
@@ -11,6 +12,8 @@
 #include <iterator>
 #include <algorithm>
 using namespace std;
+
+const int INF = 9999999;
 
 template<typename TV, typename TE>
 struct Edge;
@@ -70,7 +73,24 @@ struct Vertex {
     }
     // std :: emplace_back () could be used, but to make it easier to read and 
     // initialize in heap, we'll use std :: push_back ()
+
+    TE operator[](Vertex<TV, TE>* ver)
+    {
+        if (this == ver)
+            return 0;
+        for (const auto& ed : edges)
+        {
+            if (ver == ed->edgeVertexes[1])
+                return ed->weight;
+        }
+        return INF;
+    }
 };
+
+template<typename TV, typename TE> ostream& operator<<(ostream& os, Vertex<TV, TE>* vertex)
+{
+    os << vertex->id << " "; return os;
+}
 
 template<typename TV, typename TE>
 class Graph{
@@ -106,8 +126,5 @@ public:
     virtual void adjList() = 0;
     ~Graph() = default;
 };
-template<typename TV, typename TE> ostream& operator<<(ostream& os, Vertex<TV, TE>* vertex)
-{
-    os << vertex->id << " "; return os;
-}
+
 #endif
