@@ -204,7 +204,7 @@ namespace Tester
 	        }
 	        case 5:
 	        {
-	            fname = "Tester/greedybfs.txt";
+	            fname = "../Tester/greedybfs.txt";
 		    FEngine.insertElementsInGraph(fname, graph);
 		    BestBFS bbfs(graph,"A", "B");
 		    auto caminoCorto = bbfs.apply();
@@ -233,6 +233,57 @@ namespace Tester
 	                    cout << "(" << v2 << ", " << weight << ") ";
 	                cout << endl;
 	            }
+	            break;
+	        }
+		case 8:
+	        {
+		  	cin >> input;
+			switch(input){
+				case 1:
+				{
+		   			fname = "../Tester/bellman.txt";
+					FEngine.insertElementsInGraph(fname, graph);
+					BellmanFord<tK, tV> bell(graph, "E");
+					if (!bell.hayNegCycle()){
+						cout << "El camino más corto desde " << "E es" << ": " << endl;
+						cout << "Vértice Peso" << endl;
+						auto a = bell.apply();
+						for (auto i : a) {
+							cout << i.first << "\t" << i.second << endl;
+						}
+					}
+					/*solucion https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/
+					A                6
+					B                3
+					C                3
+					D                2
+					E                0
+					*/
+					break;
+				}
+				case 2:
+				{
+					fname = "../Tester/bellman2.txt";
+					FEngine.insertElementsInGraph(fname, graph);
+					BellmanFord<tK, tV> bell(graph, "A");
+					if (!bell.hayNegCycle()){
+						cout << "El camino más corto desde " << "A es" << ": " << endl;
+						cout << "Vértice Peso" << endl;
+						auto a = bell.apply();
+						for (auto i : a) {
+							cout << i.first << "\t" << i.second << endl;
+						}
+					}
+					/*solucion https://ycpcs.github.io/cs360-spring2019/lectures/lecture21.html
+					A                0
+					B                -1
+					C                2
+					D                -2
+					E                1
+					*/
+					break;
+				} default: break;
+			}
 	            break;
 	        }
 	        default: break;
