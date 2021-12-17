@@ -24,7 +24,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
             // create and insert node in std::unordered_map
             Vertex<TV,TE>* newVertex = new Vertex<TV,TE>();
             newVertex->data = vertex;
-
+            newVertex->id = id;
             this->vertexes[id] = newVertex;
             return true;
         }
