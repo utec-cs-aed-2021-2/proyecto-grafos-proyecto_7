@@ -2,12 +2,14 @@
 #include "Parser/parser.h"
 
 int main(int argc, char *argv[]) {
-#ifndef TEST
-    freopen("output.txt", "w", stdout);
-#endif
+//#ifndef TEST
+//    freopen("output.txt", "w", stdout);
+//#endif
     Tester::runMenu();
-    //Tester::executeExamples();
-    //Tester::executeParser();
-    
-    return EXIT_SUCCESS;
+    Tester::executeExamples();
+    Tester::executeParser();
+    parser Parser;
+    Parser.readJSON();
+
+    //return EXIT_SUCCESS;
 }

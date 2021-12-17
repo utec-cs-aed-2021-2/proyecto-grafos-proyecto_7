@@ -41,12 +41,12 @@ namespace Tester
 
 	void executeExamples()
 	{
-		cout << __PRETTY_FUNCTION__ << endl;
+		//cout << __PRETTY_FUNCTION__ << endl;
 	}
 
 	void executeParser()
 	{
-		cout << __PRETTY_FUNCTION__ << endl;
+	    //cout << __PRETTY_FUNCTION__ << endl;
 	}
 
 	void runAlgorithms(Graph<tK, tV>* graph)
@@ -60,13 +60,13 @@ namespace Tester
 	    cout << "2. Kruskal\n";
 	    cout << "3. Prim\n";
 	    cout << "================================================" << endl;
-	    //cin >> input;
-	    input = 4;
+	    cin >> input;
+	    //input = 4;
 	    switch (input)
 	    {
 	    	case 1:
 	    	{
-	    		fname = "Tester/bfs_dfs.txt";
+	    		fname = "../Tester/bfs_dfs.txt";
 	    		string label_id = "0";
 	    		FEngine.insertElementsInGraph(fname, graph);
 	    		BFS tt1(graph, label_id); DFS tt2(graph, label_id);
@@ -83,7 +83,7 @@ namespace Tester
 	    	}
 	    	case 2:
 	    	{
-	    		fname = "Tester/mst3.txt";
+	    	    fname = "../Tester/mst3.txt";
 	    		FEngine.insertElementsInGraph(fname, graph);
 	    		graph->adjList();
 
@@ -94,7 +94,7 @@ namespace Tester
 	    	}
 	    	case 3:
 	    	{
-	    		fname = "Tester/mst3.txt";
+	    	    fname = "../Tester/mst3.txt";
 	    		FEngine.insertElementsInGraph(fname, graph);
 	    		Kruskal krus(graph);
 	    		krus.apply();
@@ -102,7 +102,7 @@ namespace Tester
 	    	}
 	    	case 4:
 	    	{
-	    		fname = "Tester/connected_dir.txt";
+	    	    fname = "../Tester/connected_dir.txt";
 	    		FEngine.insertElementsInGraph(fname, graph);
 	    		cout << boolalpha << graph->isConnected() << endl;
 	    		cout << boolalpha << graph->isStronglyConnected() << endl;
@@ -117,7 +117,7 @@ namespace Tester
 	    auto dgraph = new DirectedGraph<tK, tV>();
 		int typeG;
 
-		cout << __PRETTY_FUNCTION__ << endl;	
+		//cout << __PRETTY_FUNCTION__ << endl;
 	    cout << "================================================" << endl;
 	    cout << "MENU GRAPH TESTER" << endl;
 	    cout << "================================================" << endl;
