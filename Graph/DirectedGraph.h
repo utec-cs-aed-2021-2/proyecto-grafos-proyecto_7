@@ -55,6 +55,7 @@ class DirectedGraph : public Graph<TV, TE>{
                 }
             }
             this->vertexes.erase(id);
+            this->numVertexes--;
             return true;
         }     
 
@@ -69,6 +70,7 @@ class DirectedGraph : public Graph<TV, TE>{
                     break;
                 }
             }
+            this->numEdges--;
             return true;
         }   
 
