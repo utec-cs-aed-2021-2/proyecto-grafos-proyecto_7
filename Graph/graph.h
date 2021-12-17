@@ -106,5 +106,8 @@ public:
     virtual void adjList() = 0;
     ~Graph() = default;
 };
-
+template<typename TV, typename TE> ostream& operator<<(ostream& os, Vertex<TV, TE>* vertex)
+{
+    os << vertex->id << " "; return os;
+}
 #endif
