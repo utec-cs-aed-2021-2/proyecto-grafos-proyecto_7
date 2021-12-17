@@ -1257,7 +1257,8 @@ Para el caso del Tester, se decidió realizar ejemplos sacados de PPTs de Clase 
 
 
 ## JSON file parser
-* Construye un grafo a partir de una archivo JSON de aereopuertos del mundo. 
+Se implementan funciones que permiten leer y almacenar información de un archivo JSON. Primero, la función readJSON() se implementa como un método en la clase Graph. Las siguientes dos funciones se implementan en un archivo llamado parser.cpp. Se realiza una clase amiga con la clase graph para poder acceder a los atributos de esta última y asignar sus valores de frente, ahorrándonos tiempo de cálculo. Desde allí, se une al archivo Tester, ya descrito anteriormente, para ver sus resultados.
+
 
 
 ### Methods:
