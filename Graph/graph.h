@@ -56,7 +56,10 @@ ostream& operator << (ostream& os, Edge<TV, TE>* ed)
 template<typename TV, typename TE>
 struct Vertex {
     TV data;
-    string id;
+    string id,city,DBTZ,name,pais,IAT,ICAO,ID_aereopuerto;
+    double longitud,latitud;
+    int timezone,DST=0;
+    vector<string> destinos;
     std::list<Edge<TV, TE>*> edges;
     Vertex() = default;
     Vertex(TV d, string id_){
