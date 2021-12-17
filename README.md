@@ -922,7 +922,167 @@ El Djikstra está hecho de tal manera que puede recibir un grafo de cualquier ti
 
 #### AStar
 ```cpp
+template<typename TV, typename TE>
+class AStar{
+private:
+	unordered_map<Vertex<TV, TE>* , bool> visited;
+    unordered_map<Vertex<TV, TE>*, Vertex<TV,TE>*> hijo_padre;
+	Vertex<TV, TE>* startV,*endV;
+    unordered_map<Vertex<TV,TE>*, int> costo;
+    //unordered_map<vector<TV,TE>*,int>heuristica;
+public:
+	AStar(Graph<TV, TE>* graph, TV start, TV end)//, unordered_map<Vertex<TV,TE>*,int>_heuristica)
+    {
+        auto un_map = graph->vertexes;
+        this->startV = graph->vertexes[start];
+        this->endV = graph->vertexes[end];
+        //this->heuristica = _heuristica;
+        for (auto [k, v] : un_map) {
+            this->visited[v] = false;
+            this->costo[v] = 0;
+            if(v == startV){
+                for(auto &i:v->edges){
+                    auto tmp = i->edgeVertexes[1];
+                    hijo_padre[tmp] = v;
+                    this->costo[tmp] = i->weight; //+ heuristica[tmp];
+                }
+            }
+        }
+        //for (auto [k, v] : visited)
+        //	cout << k->data << " -> " << v << endl;
+    }
+	AStar(UnDirectedGraph<TV, TE>* graph, TV start, TV end)//, unordered_map<Vertex<TV,TE>*,int>_heuristica)
+	{
+		auto un_map = graph->vertexes;
+		this->startV = graph->vertexes[start];
+        this->endV = graph->vertexes[end];
+        //this->heuristica = _heuristica;
+		for (auto [k, v] : un_map) {
+            this->visited[v] = false;
+            this->costo[v] = 0;
+            if(v == startV){
+                for(auto &i:v->edges){
+                    auto tmp = i->edgeVertexes[1];
+                    hijo_padre[tmp] = v;
+                    this->costo[tmp] = i->weight; //+ heuristica[tmp];
+                }
+            }
+        }
+		//for (auto [k, v] : visited)
+		//	cout << k->data << " -> " << v << endl;
+	}
+    AStar(DirectedGraph<TV, TE>* graph, TV start, TV end)//, unordered_map<Vertex<TV,TE>*,int>_heuristica)
+    {
+        auto un_map = graph->vertexes;
+        this->startV = graph->vertexes[start];
+        this->endV = graph->vertexes[end];
+        //this->heuristica = _heuristica;
+        for (auto [k, v] : un_map) {
+            this->visited[v] = false;
+            this->costo[v] = 0;
+            if(v == startV){
+                for(auto &i:v->edges){
+                    auto tmp = i->edgeVertexes[1];
+                    hijo_padre[tmp] = v;
+                    this->costo[tmp] = i->weight; //+ heuristica[tmp];
+                }
+            }
+        }
+        //for (auto [k, v] : visited)
+        //	cout << k->data << " -> " << v << endl;
+    }
+    Vertex<TV,TE>* less_cost_node(){
+        int menor,n=0;
+        auto tmp = startV;
+        for(auto &i:costo){
+            if(n==0 && i.second !=0 && visited[i.first] == false)
+            {
+                menor = i.second;
+                tmp = i.first;
+                n++;
+            }
+            else if(i.second != 0 && n>0 && visited[i.first] == false){
+                if(i.second < menor) {
+                    tmp = i.first;
+                    menor = i.second;
+                }
+            }
+        }
+        visited[tmp] = true;
+        return tmp;
+    }
+    void actualizar_costos(Vertex<TV,TE>* node){
+        for(auto &i:node->edges){
+            auto tmp = i->edgeVertexes[1];
+            if(this->costo[tmp] == 0)
+            {
+                this->costo[tmp] = this->costo[node] + i->weight; //+ heuristica[tmp];
+                this->hijo_padre[tmp] = node;
+            }
+            else
+            {
+                if (this->costo[tmp] > this->costo[node] + i->weight){ //+ heuristica[tmp]) {
+                    this->costo[tmp] = this->costo[node] + i->weight; //+ heuristica[tmp];
+                    this->hijo_padre[tmp] = node;
+                }
+            }
+        }
+    }
+    bool union_nodos(Vertex<TV,TE>*tmp,Vertex<TV,TE>* nodo_menor){
+        bool veracidad= false;
+        if(tmp == startV)
+            return true;
+        for(auto &i:tmp->edges)
+        {
+            if((i->edgeVertexes[1] == nodo_menor) && (i->weight + costo[tmp] <= costo[nodo_menor]) && tmp != startV){
+                veracidad = true;
+                break;
+            }
+        }
+        return veracidad;
+    }
+    void camino_final(stack<Vertex<TV,TE>*> &q)
+    {
+        q.push(this->endV);
+        auto tmp = this->hijo_padre[this->endV];
+        q.push(tmp);
+        while (q.top() != this->startV){
+            tmp = this->hijo_padre[q.top()];
+            q.push(tmp);
+        }
+    }
 
+	void apply()
+	{
+        stack<Vertex<TV,TE>*> s;
+        stack<Vertex<TV, TE>*>q;
+        s.push(startV);
+        visited[startV] = true;
+        while (s.top() != endV)
+        {
+            Vertex<TV,TE>* nodo_menor = less_cost_node();
+            auto tmp = s.top();
+            while (!union_nodos(tmp,nodo_menor))
+            {
+                s.pop();
+                tmp = s.top();
+            }
+            if(nodo_menor == this->endV)
+            {
+                camino_final(q);
+                break;
+            }
+            s.push(nodo_menor);
+            actualizar_costos(nodo_menor);
+        }
+        while (!q.empty()){
+            cout << q.top() <<"-> ";
+            q.pop();
+        }
+        cout << "end";
+
+    }
+};
 ```
 
 #### BestBFS
@@ -1004,7 +1164,23 @@ Al igual que para el Prim, volvemos a utilizar el renombramiento de pares weight
 
 #### FloydWarshall
 ```cpp
-
+template<typename TV, typename TE>
+class FloydWarshall{
+    map<Vertex<TV, TE>*, map<Vertex<TV, TE>*, TE>> dist;
+public:
+    FloydWarshall(DirectedGraph<TV, TE>* graph)
+    {
+        for (const auto& v1 : graph->vertexes)
+            for (const auto& v2 : graph->vertexes)
+                this->dist[v1.second][v2.second] = (*graph->vertexes[v1.first])[v2.second];
+        for (const auto& v1 : graph->vertexes)
+            for (const auto& v2 : graph->vertexes)
+                for (const auto& v3 : graph->vertexes)
+                    if (dist[v1.second][v2.second] < INF && dist[v3.second][v2.second] < INF)
+                        this->dist[v1.second][v2.second] = min(dist[v1.second][v2.second], dist[v1.second][v3.second] + dist[v3.second][v2.second]);
+    }
+    auto run(){ return this->dist; }
+};
 ```
 
 #### BellmanFord
@@ -1071,6 +1247,13 @@ public:
 };
 ```
 El algoritmo BellmanFord viene a ser muy similar al Djikstra, en el sentido que este trata de hallar también el camino más corto. Sin embargo, la ventaja que ofrece es que es capaz de funcionar con grafos dirigidos con pesos negativos y, a su vez, puede detectar ciclos negativos, pero como desventaja es que resulta siendo un método muy exhaustivo el cual termina siendo más complejo que el Djikstra. Este algoritmo solo puede recibir un grafo dirigido y un punto de inicio, los cuales los guarda como atributos en el constructor. Primero, se inicializa un mapa de distancias, el cual inicia para todos como INF, a excepción del vértice de inicio el cual inicia con distancia 0. Después, se hace un recorrido del número de vértices en el grafo - 1, para cada una de las aristas, trata de dar los caminos de distancias más cortas. Después, se vuelve a recorrer de manera final todas las aristas y, en caso se encuentre un camino más corto, este se reporta como un ciclo negativo y la función retorna un mapa vacío. Si es que no se detecta un ciclo negativo, retorna el mapa de las distancias hallado. El método hayNegCycle() retorna un booleano que indica si hubo o no un ciclo negativo.
+
+## Tester
+Para experimentar de manera exhaustiva con cada uno de los algoritmos y estructuras presentadas, se realizó un tester en el directorio tester/tester.h, el cual se ejecuta a través del main. Este tester está hecho de tal manera que nos permite experimentar tanto con ejemplos puestos por nosotros, como por ejemplos sacados de un archivo JSON. Ambas formas aceptan interactuar con grafos dirigidos y no dirigidos. Al correr el tester, aparecerá un menú el cual dará a elegir al usuario el método de testeo que el desea: Undirected Tester, Directed Tester, Undirected Parser o Directed Parser. Cada test, tiene asignado a si mismo un JSON para leer o un directorio a un archivo txt, el cual contiene los vértices y aristas del grafo a crear. Cada algoritmo tiene 1 o 2 testcases para experimentar consigo.
+
+## Tester_Imagenes
+Para el caso del Tester, se decidió realizar ejemplos sacados de PPTs de Clase u otro material anexado. El output que se recibe como resultado se corrobora con la imagen respectiva en la carpeta Tester/imgTest.
+
 
 ## JSON file parser
 * Construye un grafo a partir de una archivo JSON de aereopuertos del mundo. 
