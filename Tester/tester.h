@@ -110,6 +110,7 @@ namespace Tester
                     FEngine.insertElementsInGraph(fname,graph);
                     AStar<tK,tV> a(graph,"A","H");
                     a.apply();
+		    break;
 	        }
 	        case 5:
 	        {
@@ -185,10 +186,11 @@ namespace Tester
 	        }
 	        case 4:
 	        {
-	            fname = "../Tester/connected_dir.txt";
-	            FEngine.insertElementsInGraph(fname, graph);
-	            cout << boolalpha << graph->isConnected() << endl;
-	            cout << boolalpha << graph->isStronglyConnected() << endl;
+	            fname = "../Tester/mst1.txt";
+                    FEngine.insertElementsInGraph(fname,graph);
+                    AStar<tK,tV> a(graph,"A","H");
+                    a.apply();
+		    break;
 	        }
 	        case 5:
 	        {
