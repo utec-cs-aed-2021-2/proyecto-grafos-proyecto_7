@@ -504,6 +504,256 @@ B:  (A 1)  (E 1)
 Para imprimir de una manera que tenga formato de adjacencyList, se recorre por todos los vértices y sus aristas, imprimiendo la información deseada en la forma correcta.
 
 ### Algorithms:
+
+Los algoritmos que se implementaron fueron los siguientes:
+
+#### BFS
+```cpp
+template<typename TV, typename TE>
+class BFS{
+private:
+	unordered_map<Vertex<TV, TE>* , bool> visited;
+	Vertex<TV, TE>* startV;
+public:
+	BFS() = default;
+	BFS(Graph<TV, TE>* graph)
+	{
+		auto un_map = graph->vertexes;
+		this->startV = (un_map.begin())->second;
+		for (auto [k, v] : un_map)
+			this->visited[v] = false;
+		//for (auto [k, v] : visited)
+		//	cout << k->data << " -> " << v << endl;
+	}
+
+	BFS(Graph<TV, TE>* graph, TV dataId)
+	{
+		auto un_map = graph->vertexes;
+		for (auto [k, v] : un_map)
+		{
+			if (v->data == dataId)
+				this->startV = v;
+			this->visited[v] = false;
+		}
+		//for (auto [k, v] : visited)
+		//	cout << k->data << " -> " << v << endl;
+	}
+
+	BFS(umap_it<TV, TE> start, umap_it<TV, TE> end, Vertex<TV, TE>* startVertex = nullptr)
+	{
+		if (startVertex == nullptr)			// set first vertex
+			startVertex = start->second;		
+		this->startV = startVertex;
+
+		while (start != end)				// iterate over all [k, v] in unordered_map
+		{
+			Vertex<TV, TE>* vertexIt = start->second;
+			//cout << vertexIt->data << " ";
+			visited[vertexIt] = false;		// initialize all as unvisited
+			start = next(start);
+		}
+		//cout << '\n' << startVertex->data << '\n';
+	}
+
+	void setInitialVertex(Vertex<TV, TE>* startVV)
+	{
+		this->startV = startVV;
+	}
+
+	template<typename Op>
+	void run(Op op)
+	{
+		//for (auto [k, v]: this->visited)
+		//	cout << k->data << ": " << boolalpha << v << endl;
+		queue<Vertex<TV, TE>*> qu;
+		qu.push(this->startV);
+		while (!qu.empty())
+		{
+			auto currentV = qu.front();
+			qu.pop();
+			if (this->visited[currentV] == true)
+				continue;	// verify if node already visited
+			this->visited[currentV] = true;
+			op(currentV);
+			for (auto edge : currentV->edges)
+			{
+				auto adj = edge->edgeVertexes[1];
+				if (this->visited[adj] == false)
+					qu.push(adj);		//cout << '\t' << currentV->data << " - " << adj->data << endl;
+			}
+		}
+	}
+};
+```
+El algoritmo BFS está hecho para realizar un recorrido desde un punto Start hasta un punto End, desde un punto Start en específico o, incluso, sin un punto declarado previamente. Cuando se inicializa la clase BFS, se realiza un recorrido para inicializa un unordered_map inicializado en false para cada vértice presente en el grafo. Este mapa tiene como objetivo ir registrando los id's de los vértices visitados como true, mientras los que no son visitados los mantiene como false. Después, para ejecutar el algoritmo se tiene que llamar al método run, el cual es capaz de recibir una función lambda que se ejecuta más adelante en el código. La idea del BFs es almacenar en un queue los vértices adyacentes al vértice que se está visitando en el front, siempre y cuando estos no hayan sido visitados. Antes de almacenar los vértices adyacentes se ejecuta la operación deseada (enviada como parámetro).
+
+#### DFS
+
+```cpp
+template<typename TV, typename TE>
+class DFS{
+private:
+	unordered_map<Vertex<TV, TE>* , bool> visited;
+	Vertex<TV, TE>* startV;
+public:
+	DFS() = default;
+	DFS(Graph<TV, TE>* graph)
+	{
+		auto un_map = graph->vertexes;
+		this->startV = (un_map.begin())->second;
+		for (auto [k, v] : un_map)
+			this->visited[v] = false;
+		//for (auto [k, v] : visited)
+		//	cout << k->data << " -> " << v << endl;
+	}
+
+	DFS(Graph<TV, TE>* graph, TV dataId)
+	{
+		auto un_map = graph->vertexes;
+		for (auto [k, v] : un_map)
+		{
+			if (v->data == dataId)
+				this->startV = v;
+			this->visited[v] = false;
+		}
+		//for (auto [k, v] : visited)
+		//	cout << k->data << " -> " << v << endl;
+	}
+
+	void setInitialVertex(Vertex<TV, TE>* startVV)
+	{
+		this->startV = startVV;
+	}
+
+	DFS(umap_it<TV, TE> start, umap_it<TV, TE> end, Vertex<TV, TE>* startVertex = nullptr)
+	{
+		if (startVertex == nullptr)			// set first vertex
+			startVertex = start->second;		
+		this->startV = startVertex;
+
+		while (start != end)				// iterate over all [k, v] in unordered_map
+		{
+			Vertex<TV, TE>* vertexIt = start->second;
+			//cout << vertexIt->data << " ";
+			this->visited[vertexIt] = false;		// initialize all as unvisited
+			start = next(start);
+		}
+		//cout << '\n' << startVertex->data << '\n';
+	}
+
+	template<typename Op>
+	void run(Op op)
+	{
+		//for (auto [k, v]: this->visited)
+		//	cout << k->data << ": " << boolalpha << v << endl;
+		stack<Vertex<TV, TE>*> st;
+		st.push(this->startV);
+		while (!st.empty())
+		{
+			auto currentV = st.top();
+			st.pop();
+			if (this->visited[currentV] == true)
+				continue;	// verify if node already visited
+			this->visited[currentV] = true;
+			op(currentV);
+			for (Edge<TV, TE>* edge : currentV->edges)
+			{
+				auto adj = edge->edgeVertexes[1];
+				if (this->visited[adj] == false)
+					st.push(adj);		//cout << '\t' << currentV->data << " - " << adj->data << endl;
+			}
+		}
+	}
+};
+```
+El DFS funciona de manera muy similar al BFS en cuanto a estructura de código. La principal y vital diferencia es el uso de un stack en vez de un queue, lo cual hace que se explora de manera profunda en vez de ancha.
+
+
+#### Kruskal
+
+```cpp
+template<typename TV, typename TE>
+class Kruskal{
+	vector<Edge<TV, TE>*> vEdges;
+	vector<Vertex<TV, TE>*> vNodes;
+	DisjoinSetArray<Vertex<TV, TE>*>* ds = nullptr;
+	unordered_map<Vertex<TV, TE>*, int> posVertex;
+public:
+	Kruskal(Graph<TV, TE>* graph)
+	{
+		for (auto [id, vertex] : graph->vertexes)
+		{
+			vNodes.push_back(vertex);
+			for (Edge<TV, TE>* ed : vertex->edges)
+				vEdges.push_back(ed);		// add edges on std::vector
+		}
+		this->ds = new DisjoinSetArray<Vertex<TV, TE>*>(this->vNodes);
+		int idx = 0;
+		for (auto node : this->vNodes)			// initialize position hash
+			posVertex[node] = idx++;
+	}
+	~Kruskal()
+	{
+		vEdges.clear(); posVertex.clear(); vNodes.clear();
+	}
+
+	UnDirectedGraph<TV, TE> apply()
+	{
+		vector<Edge<TV, TE>*> nEdges;
+		sort(vEdges.begin(), vEdges.end(), [](Edge<TV, TE>* e1, Edge<TV, TE>* e2){
+			return e1->weight < e2->weight;
+		});
+		//for (auto ed: vEdges)	cout << ed << '\n';	cout << '\n';
+		//for (auto [k, idx] : posVertex) cout << k->data << " -> " << idx << endl;
+
+		for (Edge<TV, TE>* ed: vEdges)
+		{
+			auto posFNode = posVertex[ed->edgeVertexes[0]];
+			auto posSNode = posVertex[ed->edgeVertexes[1]];
+			if (!ds->isConnected(posFNode, posSNode))
+			{
+				nEdges.push_back(ed);
+				ds->Union(posFNode, posSNode);
+			}
+		}
+		auto mstResult = new UnDirectedGraph<TV, TE>();
+		for (auto v : this->vNodes)
+			mstResult->insertVertex(v->data, v->data);
+		for (auto ed: nEdges)
+		{	// cout << ed << '\n';
+			auto id1 = ed->edgeVertexes[0]->data;
+			auto id2 = ed->edgeVertexes[1]->data;
+			mstResult->createEdge(id1, id2, ed->weight);
+		}
+			
+		return *mstResult;
+	}
+};
+```
+
+
+
+#### Prim
+```cpp
+
+```
+
+
+#### Djikstra
+
+
+#### AStar
+
+
+#### BestBFS
+
+
+
+#### FloydWarshall
+
+
+#### BellmanFord
+
 ```cpp
 //Given the graph
 UndirectedGraph<char, int> graph;
