@@ -102,8 +102,9 @@ namespace Tester
 	            fname = "../Tester/prim.txt";
 	            FEngine.insertElementsInGraph(fname, graph);
 	            Prim prim(graph, "A");
-	            auto a = prim.apply();
-		    a->adjList();
+	            auto camino = prim.apply();
+		    camino->adjList();
+		    cout << "El coste del camino es " << prim.primmCosto() << endl;
 	            break;
 	        }
 	        case 4:
@@ -188,8 +189,9 @@ namespace Tester
 	            fname = "../Tester/prim.txt";
 	            FEngine.insertElementsInGraph(fname, graph);
 	            Prim prim(graph, "A");
-	            auto a = prim.apply();
-		    a->adjList();
+	            auto camino = prim.apply();
+		    camino->adjList();
+		    cout << "El coste del camino es " << prim.primmCosto() << endl;
 	            break;
 	        }
 	        case 4:
