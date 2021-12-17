@@ -7,7 +7,7 @@ string fillJSONVertex(Vertex<TV, TE>* ver, json::iterator jIt)
     string id;
     for (auto&[key, value]: jIt->items()) {
         if (key == "Airport ID")
-            ver->id = value;
+            ver->id  = id = value;
         else if (key == "City")
             ver->city = value;
         else if (key == "Country")

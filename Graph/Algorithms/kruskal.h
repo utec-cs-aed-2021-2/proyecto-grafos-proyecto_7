@@ -2,8 +2,8 @@
 #define KRUSKAL_H
 
 #include <algorithm>
-#include "..\graph.h"
-#include "..\Structures\dsarray.h"
+#include "../graph.h"
+#include "../Structures/dsarray.h"
 
 template<typename TV, typename TE>
 class Kruskal{

@@ -136,6 +136,7 @@ public:
     void addVertex(string id, Vertex<TV, TE>* ver)
     {
         this->vertexes[id] = ver;
+        this->numVertexes++;
     }
     void clearJSON()
     {

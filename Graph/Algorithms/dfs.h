@@ -1,7 +1,7 @@
 #ifndef DFS_H
 #define DFS_H
 
-#include "..\graph.h"
+#include "../graph.h"
 using namespace std;
 
 template<typename TV, typename TE>

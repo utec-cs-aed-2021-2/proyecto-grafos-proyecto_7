@@ -1,7 +1,7 @@
 #ifndef BFS_H
 #define BFS_H
 
-#include "..\graph.h"
+#include "../graph.h"
 using namespace std;
 
 template<typename TV, typename TE>
@@ -70,7 +70,7 @@ public:
 				continue;	// verify if node already visited
 			this->visited[currentV] = true;
 			op(currentV);
-			for (Edge<TV, TE>* edge : currentV->edges)
+			for (auto edge : currentV->edges)
 			{
 				auto adj = edge->edgeVertexes[1];
 				if (this->visited[adj] == false)

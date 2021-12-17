@@ -2,8 +2,8 @@
 #define UNDIRECTEDGRAPH_H
 
 #include "graph.h"
-#include "Algorithms\dfs.h"
-#include "Algorithms\bfs.h"
+#include "Algorithms/dfs.h"
+#include "Algorithms/bfs.h"
 template<typename TV, typename TE>
 class UnDirectedGraph : public Graph<TV, TE>{
     friend void uGraphMake(UnDirectedGraph<string, double> &tempGraph); // Adds the parsed data into the specified undirected graph

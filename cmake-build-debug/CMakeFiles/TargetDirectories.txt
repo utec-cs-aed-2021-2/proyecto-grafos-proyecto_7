@@ -1,0 +1,3 @@
+/home/darkjuan25/Documentos/CLion_Proyects/AyE/proyecto-grafos-proyecto_7/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/darkjuan25/Documentos/CLion_Proyects/AyE/proyecto-grafos-proyecto_7/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/darkjuan25/Documentos/CLion_Proyects/AyE/proyecto-grafos-proyecto_7/cmake-build-debug/CMakeFiles/proyecto_grafos_proyecto_7.dir
