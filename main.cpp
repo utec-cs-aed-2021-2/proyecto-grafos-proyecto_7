@@ -6,11 +6,11 @@ int main(int argc, char *argv[]) {
 //    freopen("output.txt", "w", stdout);
 //#endif
     Tester::runMenu();
-    Tester::executeExamples();
-    Tester::executeParser();
+    //Tester::executeExamples();
+    //Tester::executeParser();
 
-    parser Parser;
-    Parser.readJSON();
+    //parser Parser;
+    //Parser.readJSON();
 
     //return EXIT_SUCCESS;
 }
