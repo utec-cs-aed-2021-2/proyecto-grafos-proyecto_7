@@ -22,6 +22,7 @@ class DirectedGraph : public Graph<TV, TE>{
                 return false;
             Vertex<TV,TE>* newVertex = new Vertex<TV,TE>();
             newVertex->data = vertex;
+            newVertex->id = id;
             this->vertexes[id] = newVertex;
             this->numVertexes++;
             return true;
