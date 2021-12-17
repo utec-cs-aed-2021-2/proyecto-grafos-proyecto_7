@@ -6,6 +6,7 @@
 #include "Algorithms\bfs.h"
 template<typename TV, typename TE>
 class DirectedGraph : public Graph<TV, TE>{
+    friend void dGraphMake(DirectedGraph<string, double> &tempGraph); // Adds the parsed data into the specified directed graph
 
     public:
         DirectedGraph() = default;

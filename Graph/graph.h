@@ -11,6 +11,9 @@
 #include <string>
 #include <iterator>
 #include <algorithm>
+#include "../Parser/nlohmann/json.hpp"
+
+using json = nlohmann::json;
 using namespace std;
 
 const int INF = 9999999;
@@ -107,6 +110,7 @@ protected:
     std::unordered_map<string, Vertex<TV, TE>*>  vertexes;
     int numEdges = 0;
     int numVertexes = 0;
+    json file;
 public:
     virtual bool insertVertex(string id, TV vertex) = 0;   
     virtual bool createEdge(string id1, string id2, TE w) = 0;     
@@ -125,6 +129,21 @@ public:
     virtual void display() = 0;
     virtual void adjList() = 0;
     ~Graph() = default;
+
+    void addVertex(string id, Vertex<TV, TE>* ver)
+    {
+        this->vertexes[id] = ver;
+    }
+    void clearJSON()
+    {
+
+    }   // Clears parser saved atributes
+
+    void readJSON()
+    {
+        std::ifstream i("../Parser/Data/pe.json");
+        i >> this->file;
+    }   // Parses JSON file and saves data into class
 };
 
 #endif

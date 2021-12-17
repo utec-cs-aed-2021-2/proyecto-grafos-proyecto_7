@@ -23,6 +23,7 @@ add_executable(proyecto_grafos_proyecto_7
         Graph/graph.h
         Graph/UndirectedGraph.h
         Parser/parser.h
+        Parser/parser.cpp
         Tester/tester.h
         Parser/nlohmann/json.hpp
         main.cpp

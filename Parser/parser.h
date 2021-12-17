@@ -1,10 +1,11 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "nlohmann/json.hpp"
 #include <fstream>
 #include <iostream>
-using json = nlohmann::json;
+#include "../Graph/graph.h"
+#include "../Graph/UndirectedGraph.h"
+#include "../Graph/DirectedGraph.h"
 
 class parser
 {
@@ -37,3 +38,4 @@ public:
 };
 
 #endif
+
