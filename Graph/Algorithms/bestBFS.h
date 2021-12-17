@@ -1,8 +1,9 @@
 #ifndef BESTBFS_H
 #define BESTBFS_H
 
-#include "..\graph.h"
+#include "../graph.h"
 #include "../UndirectedGraph.h"
+#include "../DirectedGraph.h"
 
 #include <map>
 #include <queue>
@@ -184,5 +185,6 @@ public:
     }
 
 };
+
 
 #endif
