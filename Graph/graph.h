@@ -50,9 +50,13 @@ ostream& operator << (ostream& os, Edge<TV, TE>* ed)
 template<typename TV, typename TE>
 struct Vertex {
     TV data;
+    string id;
     std::list<Edge<TV, TE>*> edges;
     Vertex() = default;
-    Vertex(TV d):data{d}{};
+    Vertex(TV d, string id_){
+        data = d;
+        id = id_;
+    };
 
     // add an edge in a graph 
     void addEdge(Vertex<TV, TE>* source, Vertex<TV, TE>* destiny, TE w)
