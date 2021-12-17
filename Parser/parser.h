@@ -6,6 +6,13 @@
 #include "../Graph/graph.h"
 #include "../Graph/UndirectedGraph.h"
 #include "../Graph/DirectedGraph.h"
+#include "../Graph/Algorithms/kruskal.h"
+#include "../Graph/Algorithms/prim.h"
+#include "../Graph/Algorithms/astar.h"
+#include "../Graph/Algorithms/dijkstra.h"
+#include "../Graph/Algorithms/floydWarshall.h"
+#include "../Graph/Algorithms/bestBFS.h"
+
 
 class parser
 {

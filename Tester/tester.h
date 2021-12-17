@@ -13,6 +13,7 @@
 #include "../Graph/Algorithms/dijkstra.h"
 #include "../Graph/Algorithms/floydWarshall.h"
 #include "../Graph/Algorithms/bestBFS.h"
+#include "../Graph/Algorithms/bellmanFord.h"
 
 using namespace std;
 
