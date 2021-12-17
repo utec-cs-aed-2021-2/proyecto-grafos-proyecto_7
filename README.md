@@ -1084,6 +1084,7 @@ public:
     }
 };
 ```
+Este algoritmo se caracteriza por tener, además de los datos de los pesos en los bordes, una heurística que sumada al peso determina por qué vértices avanzar hasta llegar al nodo final. En esta implementación, tenemos 3 atributos clave: parent_child, que almacena el padre a través del cual se debe llegar al niño, is_visited, que restringe el cambio de pesos entre nodos, y cost, que almacena el costo mínimo para llegar a ese nodo. Con estos atributos, sumados al vértice inicial y final, es posible construir el algoritmo. En resumen, los vértices que eran posibles caminos se almacenan y eliminan de una pila, hasta que se alcanza el vértice final. Luego, desde ese vértice final, se busca su padre, luego el padre de ese padre, y así sucesivamente hasta que el padre sea el nodo inicial (esto está 100% garantizado). De esa manera obtenemos la forma menos costosa.
 
 #### BestBFS
 ```cpp
