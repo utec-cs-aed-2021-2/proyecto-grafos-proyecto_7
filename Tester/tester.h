@@ -12,6 +12,7 @@
 #include "../Graph/Algorithms/astar.h"
 #include "../Graph/Algorithms/dijkstra.h"
 #include "../Graph/Algorithms/floydWarshall.h"
+#include "../Graph/Algorithms/bestBFS.h"
 
 using namespace std;
 
@@ -114,7 +115,12 @@ namespace Tester
 	        }
 	        case 5:
 	        {
-	            break;
+	            fname = "../Tester/greedybfs.txt";
+		    FEngine.insertElementsInGraph(fname, graph);
+		    BestBFS bbfs(graph,"A", "B");
+		    auto caminoCorto = bbfs.apply();
+		    caminoCorto->adjList();
+		    break;
 	        }
 	        case 6:
 	        {
@@ -194,7 +200,12 @@ namespace Tester
 	        }
 	        case 5:
 	        {
-	            break;
+	            fname = "Tester/greedybfs.txt";
+		    FEngine.insertElementsInGraph(fname, graph);
+		    BestBFS bbfs(graph,"A", "B");
+		    auto caminoCorto = bbfs.apply();
+		    caminoCorto->adjList();
+		    break;
 	        }
 	        case 6:
 	        {
@@ -239,10 +250,14 @@ namespace Tester
 	    cout << "================================================" << endl;
 	    //cin >> typeG;
 	    typeG = 2;
-	    if (typeG == 1)
-	    	runAlgorithms(ugraph);
-    	else 
-    		runAlgorithms(dgraph);
+	    if (typeG == 1){
+		cout << "Graph type is " << typeG << ", hence it is an Undirected Graph" << endl;
+	        runAlgorithms(ugraph);
+	    }
+	    else{
+		cout << "Graph type is " << typeG << ", hence it is an Directed Graph" << endl;
+		runAlgorithms(dgraph);
+	    }
 	}
 }
 
