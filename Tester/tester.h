@@ -10,6 +10,7 @@
 #include "../Graph/Algorithms/kruskal.h"
 #include "../Graph/Algorithms/prim.h"
 #include "../Graph/Algorithms/astar.h"
+#include "../graph/Algorithms/bestBFS"
 
 using namespace std;
 
@@ -59,6 +60,9 @@ namespace Tester
 	    cout << "1. BFS-DFS\n";
 	    cout << "2. Kruskal\n";
 	    cout << "3. Prim\n";
+	    cout << "4. IsConnected_isStronglyConnected\n";
+	    cout << "5. Prim\n";
+	    cout << "6. Prim\n";
 	    cout << "================================================" << endl;
 	    cin >> input;
 	    //input = 4;
@@ -106,13 +110,24 @@ namespace Tester
 	    		FEngine.insertElementsInGraph(fname, graph);
 	    		cout << boolalpha << graph->isConnected() << endl;
 	    		cout << boolalpha << graph->isStronglyConnected() << endl;
+			break;
 	    	}
 		case 5:
             	{
-                fname = "../Tester/mst1.txt";
-                FEngine.insertElementsInGraph(fname,graph);
-                AStar<tK,tV> a(graph,"A","H");
-                a.apply();
+			fname = "../Tester/mst1.txt";
+			FEngine.insertElementsInGraph(fname,graph);
+			AStar<tK,tV> a(graph,"A","H");
+			a.apply();
+			break;
+		}
+	        case 6:
+	        {
+			fname = "../Tester/greedybfs.txt";
+			FEngine.insertElementsInGraph(fname,graph);
+			BestBFS bbfs(graph,"A", "B");
+			auto a = bbfs.apply();
+			a->adjList();
+			break;
 		}
 	    	default: break;
 	    }
@@ -120,9 +135,9 @@ namespace Tester
 
 	void runMenu()
 	{
-		auto ugraph = new UnDirectedGraph<tK, tV>();
+	    auto ugraph = new UnDirectedGraph<tK, tV>();
 	    auto dgraph = new DirectedGraph<tK, tV>();
-		int typeG;
+	    int typeG;
 
 		//cout << __PRETTY_FUNCTION__ << endl;
 	    cout << "================================================" << endl;
