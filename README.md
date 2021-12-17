@@ -735,44 +735,342 @@ public:
 
 #### Prim
 ```cpp
+using peso = double;
+//peso, start y end 
+using weightPar = pair<peso, pair<string, string>>; 
 
+struct ComparatorPrim{
+    bool operator()(const weightPar w1, const weightPar w2) const {
+        return w1.first > w2.first;
+    }
+};
+
+
+template<typename TV, typename TE>
+class Prim{
+private:
+	int costo;
+	UnDirectedGraph<TV,TE>* outGraph;
+   
+public:
+	Prim(DirectedGraph<TV, TE>* graph, string start)
+	{
+		if (!(graph->findById(start))) throw std::invalid_argument("node not found\n");
+
+		priority_queue<weightPar,vector<weightPar>, ComparatorPrim> pq;        
+		unordered_map<string, bool> visitados;
+		for (auto i : graph->vertexes){
+            visitados[i.first] = false;
+        }
+		outGraph = new UnDirectedGraph<TV,TE>;	
+
+		visitados[start] = true;
+		outGraph->insertVertex(start, graph->vertexes[start]->data);
+
+		Vertex<TV,TE>* auxVert = graph->vertexes[start];
+
+		for(auto currEdge: auxVert->edges){
+			Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+			if(visitados[currVert->id] == false){
+				pq.push(make_pair(currEdge->weight, make_pair(start,currVert->id)));
+			}
+		}
+		costo = 0;
+
+		while(!pq.empty()){
+			string idS = pq.top().second.first;
+			string idF = pq.top().second.second;
+			auto peso = pq.top().first;
+
+			pq.pop();
+
+			if(visitados[idF] == false){
+				costo += peso;
+				visitados[idF] = true;
+				outGraph->insertVertex(idF, graph->vertexes[idF]->data);
+				outGraph->createEdge(idS, idF, peso);
+				Vertex<TV,TE>* vertStart = graph->vertexes[idF];
+
+				for (auto currEdge: vertStart->edges){
+					Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+					if (visitados[currVert->id] == false){
+						pq.push(make_pair(currEdge->weight, make_pair(vertStart->id, currVert->id)));
+					}
+				}
+			}
+		}
+	}
+
+	Prim(Graph<TV, TE>* graph, string start)
+	{
+		if (!(graph->findById(start))) throw std::invalid_argument("node not found\n");
+
+		priority_queue<weightPar,vector<weightPar>, ComparatorPrim> pq;        
+		unordered_map<string, bool> visitados;
+		for (auto i : graph->vertexes){
+            visitados[i.first] = false;
+        }
+		outGraph = new UnDirectedGraph<TV,TE>;	
+
+		visitados[start] = true;
+		outGraph->insertVertex(start, graph->vertexes[start]->data);
+
+		Vertex<TV,TE>* auxVert = graph->vertexes[start];
+
+		for(auto currEdge: auxVert->edges){
+			Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+			if(visitados[currVert->id] == false){
+				pq.push(make_pair(currEdge->weight, make_pair(start,currVert->id)));
+			}
+		}
+		costo = 0;
+
+		while(!pq.empty()){
+			string idS = pq.top().second.first;
+			string idF = pq.top().second.second;
+			auto peso = pq.top().first;
+
+			pq.pop();
+
+			if(visitados[idF] == false){
+				costo += peso;
+				visitados[idF] = true;
+				outGraph->insertVertex(idF, graph->vertexes[idF]->data);
+				outGraph->createEdge(idS, idF, peso);
+				Vertex<TV,TE>* vertStart = graph->vertexes[idF];
+
+				for (auto currEdge: vertStart->edges){
+					Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+					if (visitados[currVert->id] == false){
+						pq.push(make_pair(currEdge->weight, make_pair(vertStart->id, currVert->id)));
+					}
+				}
+			}
+		}
+	}
+
+	int primmCosto(){
+		return costo;
+	}
+
+	UnDirectedGraph<TV,TE>* apply()
+	{
+		return outGraph;
+	}
+};
 ```
-
+El algoritmo Prim está hecho de tal manera que puede recibir como parámetro un grafo de cualquier tipo (dirigido, no dirigido) y un punto de inicio. Primero que nada, preparamos una estructura llamada weightPar que almacena pares (aunque hubiera sido mejor que sea un tupla de 3, pensándolo mejor), donde se guarda el peso de la arista, el vértice source y el vértice destiny. Se encarga de inicializar un unordered map de visitados en falso, a excepción del vértice de inicio, el cual inicia como verdadero. La idea consiste en almacenar en un priority queue todas las aristas adyacentes al vértice que se encuentra en el top del pq, siempre y cuando estas no hayan sido visitadas previamente. Es importante mencionar que el pq está hecho de tal manera que siempre se ponga primero a la arista de menor peso. A lo largo de todo el recorrido, se va sumando el peso de cada arista al atributo costo y, a su vez, se van insertando los vértices y aristas que han sido visitados. Con el método apply(), se termina retornando un grafo no dirigido con los vértices y aristas visitados, es decir, el MST. Con el método primmCosto(), se retorna el costo total del recorrido.
 
 #### Djikstra
+```cpp
+template<typename TV, typename TE>
+class Dijkstra{
+    map<Vertex<TV, TE>*, TE> dist;
+
+    void run(Graph<TV, TE>* graph, Vertex<TV, TE>* source)
+    {
+        auto comparer = [](pair<TE, Vertex<TV, TE>*> p1, pair<TE, Vertex<TV, TE>*> p2){
+            return p1.first > p2.first;
+        };
+        priority_queue<pair<TE, Vertex<TV, TE>*>, vector<pair<TE, Vertex<TV, TE>*>>, decltype(comparer) > pq(comparer, vector<pair<TE, Vertex<TV, TE>*>>());
+        for (const auto& [id, vertex] : graph->vertexes)
+            this->dist[vertex] = INF;
+        pq.push({0, source});
+        this->dist[source] = 0;
+
+        while (!pq.empty())
+        {
+            Vertex<TV, TE>* curr = pq.top().second;
+            TE curr_d = pq.top().first;
+            pq.pop();
+
+            for (const auto& ed : curr->edges)
+            {
+                auto src = ed->edgeVertexes[1];
+                if (curr_d + ed->weight < this->dist[src])
+                {
+                    dist[src] = curr_d + ed->weight;
+                    pq.push({dist[src], src});
+                }
+            }
+        }
+    }
+public:
+    Dijkstra(Graph<TV, TE>* graph){
+        Vertex<TV, TE>* start;
+        for (auto [id, vertex] : graph->vertexes)
+        {
+            if (id == "1")
+            {
+                start = vertex;
+                break;
+            }
+        }
+
+        run(graph, start);
+    }
+    Dijkstra(Graph<TV, TE>* graph, Vertex<TV, TE>* source){
+        run(graph, source);
+    }
+
+
+    map<Vertex<TV, TE>*, TE> run(){ return dist; }
+};
+```
+El Djikstra está hecho de tal manera que puede recibir un grafo de cualquier tipo con un vértice de inicio para iniciar el recorrido o solamente el grafo, ya que dentro de la función decide agarrar un vértice como el vértice de inicio. Cuando se inicia el algoritmo con el método run(), se inicializa un mapa de distancias para cada vértice en INF. Luego, se empuja al priority queue el vértice de inicio con costo 0. A partir de ahí, se van explorando los vértices adjacentes y se agregan al priority queue sumándoles el costo acumulado para llegar hast ahí. Si es que se encuentra una arista de coste menor para llegar al siguiente vértice, se actualiza el valor de la distancia de dicho vértice. Se retorna el mapa de las distancias para cada vértice.
 
 
 #### AStar
-
-
-#### BestBFS
-
-
-
-#### FloydWarshall
-
-
-#### BellmanFord
-
 ```cpp
-//Given the graph
-UndirectedGraph<char, int> graph;
-
-//1- Generates a MST graph using the Kruskal approach (only for undirected graphs)
-Kruskal<char, int> kruskal(&graph);
-UndirectedGraph<char, int> result = kruskal.apply();//return a tree
-
-//2- Generates a MST graph using the Prim approach (only for undirected graphs)
-Prim<char, int> prim(&graph, "A");
-UndirectedGraph<char, int> result = prim.apply();//return a tree
-
-//3- A *
-AStar<char, int> astar(&graph, "A", "Z", vector<int> heuristics);
-UndirectedGraph<char, int> result = astar.apply();
 
 ```
 
+#### BestBFS
+```cpp
+using peso = double;
+//peso, start y end 
+using weightPar = pair<peso, pair<string, string>>; 
 
+struct Comparator{
+    bool operator()(const weightPar w1, const weightPar w2) const {
+        return w1.first > w2.first;
+    }
+};
+
+template<typename TV, typename TE>
+class BestBFS{
+private:
+    DirectedGraph<TV,TE>* outGraph;
+
+public:
+    BestBFS() = default;
+
+    BestBFS(Graph<TV,TE>* graph, string start, string end){
+        if (!(graph->findById(start)) || !(graph->findById(end))) throw std::invalid_argument("one or both nodes not found\n");
+
+        unordered_map<string, bool> visitados;
+
+        for (auto i : graph->vertexes){
+            visitados[i.first] = false;
+        }
+        //weightpar = weight, start, end
+        priority_queue<weightPar,vector<weightPar>, Comparator> pq;        
+
+
+        pq.push(make_pair(0,make_pair(start,"")));
+
+        outGraph = new DirectedGraph<TV,TE>;
+        outGraph->insertVertex(start, graph->vertexes[start]->data);
+        
+        visitados[start] = true;
+
+        while(!pq.empty()){
+            string idF = "";
+            if (pq.top().second.second == ""){
+                idF = pq.top().second.first;
+            } else{
+                idF = pq.top().second.second;
+            }
+
+            string idS = pq.top().second.first;
+            auto weight = pq.top().first;
+            Vertex<TV,TE>* vertStart = graph->vertexes[idF];
+
+            if (idF != "" && (visitados[vertStart->id] == false)){
+                visitados[vertStart->id] = true;
+                outGraph->insertVertex(idF, vertStart->data);
+                outGraph->createEdge(idS,idF, weight);
+            }
+            
+            pq.pop();
+
+            if (idS == end) break;
+
+            for (auto currEdge : vertStart->edges){
+                Vertex<TV,TE>* currVert = currEdge->edgeVertexes[1];
+                if (visitados[currVert->id] == false){
+                    pq.push(make_pair(currEdge->weight, make_pair(vertStart->id, currVert->id)));
+                }
+            }
+        }
+    }
+
+    DirectedGraph<TV,TE>* apply() {
+        return outGraph;
+    }
+};
+```
+Al igual que para el Prim, volvemos a utilizar el renombramiento de pares weightPar, el cual almacena el costo de la arista, el id del vértice source y el id del vértice destiny. El algoritmo BestBFS puede recibir tanto un grafo dirigido como uno no dirigido. Es necesario que también reciba como parámetro el id del vértice de inicio y el id del vértice al que se quiere llegar. Primero que nada, se verifica que ambos vértices existan. Después, se inicializa un unorderedmap de vértices visitados en falso. Se agrega al priority queue el vértice de inicio con costo 0 y se marca como visitado. Se guardan los datos del weightPar presente en el top del pq, para luego eliminarlo con un pop. Se verifica si es que el vértice en el top ha sido visitado, si no fue visitado se marca como visitado. Después, se verifica si es que se llegó al vértice destiny, si es así se termina la función. Si no, se recorren todos los vértices adyacentes siempre y cuando estos no hayan sido visitados. Para cada iteración, se va armando un grafo dirigido con las aristas y vértices visitados, el cual es retornado con el método apply().
+
+#### FloydWarshall
+```cpp
+
+```
+
+#### BellmanFord
+```cpp
+template<typename TV, typename TE>
+class BellmanFord{
+private:
+    DirectedGraph<TV,TE>* graph;
+    string start;
+    bool cicloNegativo = false;
+public:
+    BellmanFord(DirectedGraph<TV, TE>* graph, string start)
+    {
+        this->graph = graph;
+        this->start = start;
+    };
+
+    unordered_map<TV,TE> apply(){
+        unordered_map<TV, TE> distancia;
+        DirectedGraph<TV,TE>* result;
+
+        for (auto i: graph->vertexes){
+            distancia[i.first] = INF;
+        } distancia[start] = 0;
+
+        auto tmn = graph->vertexes.size();
+
+
+        for(int i = 0; i < tmn - 1; i++){
+            for (auto currVert : graph->vertexes){
+                for (auto currEdge : currVert.second->edges){
+                    string idS = currEdge->edgeVertexes[0]->id;
+                    string idF = currEdge->edgeVertexes[1]->id;
+                    auto peso = currEdge->weight;
+                    
+                    if (distancia[idS] != INF && (distancia[idS]+peso < distancia[idF]))
+                    {
+                        distancia[idF] = distancia[idS]+peso;
+                    }
+                }
+            }
+        }
+
+        for (auto currVert : graph->vertexes){
+            for (auto currEdge : currVert.second->edges){
+                string idS = currEdge->edgeVertexes[0]->id;
+                string idF = currEdge->edgeVertexes[1]->id;
+                auto peso = currEdge->weight;
+
+                if (distancia[idS] != INF && (distancia[idS]+peso < distancia[idF]))
+                {
+                    cout << "Grafo tiene ciclo de peso negativo";
+                    this->cicloNegativo = true;
+                    return unordered_map<TV,TE>();
+                }
+            }
+        }
+        return distancia;
+    }
+
+    bool hayNegCycle(){
+        return cicloNegativo;
+    }
+};
+```
+El algoritmo BellmanFord viene a ser muy similar al Djikstra, en el sentido que este trata de hallar también el camino más corto. Sin embargo, la ventaja que ofrece es que es capaz de funcionar con grafos dirigidos con pesos negativos y, a su vez, puede detectar ciclos negativos, pero como desventaja es que resulta siendo un método muy exhaustivo el cual termina siendo más complejo que el Djikstra. Este algoritmo solo puede recibir un grafo dirigido y un punto de inicio, los cuales los guarda como atributos en el constructor. Primero, se inicializa un mapa de distancias, el cual inicia para todos como INF, a excepción del vértice de inicio el cual inicia con distancia 0. Después, se hace un recorrido del número de vértices en el grafo - 1, para cada una de las aristas, trata de dar los caminos de distancias más cortas. Después, se vuelve a recorrer de manera final todas las aristas y, en caso se encuentre un camino más corto, este se reporta como un ciclo negativo y la función retorna un mapa vacío. Si es que no se detecta un ciclo negativo, retorna el mapa de las distancias hallado. El método hayNegCycle() retorna un booleano que indica si hubo o no un ciclo negativo.
 
 ## JSON file parser
 * Construye un grafo a partir de una archivo JSON de aereopuertos del mundo. 
