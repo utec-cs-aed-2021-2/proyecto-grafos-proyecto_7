@@ -301,19 +301,29 @@ namespace Tester
 	    cout << "================================================" << endl;
 	    cout << "MENU GRAPH TESTER" << endl;
 	    cout << "================================================" << endl;
-	    cout << "1. Undirected\n";
-	    cout << "2. Directed\n";
+	    cout << "1. Undirected Tester\n";
+	    cout << "2. Directed Tester \n";
+        cout << "1. Undirected Parser\n";
+        cout << "2. Directed Parser \n";
 	    cout << "================================================" << endl;
-	    //cin >> typeG;
-	    typeG = 2;
-	    if (typeG == 1){
-		cout << "Graph type is " << typeG << ", hence it is an Undirected Graph" << endl;
-	        runAlgorithms(ugraph);
-	    }
-	    else{
-		cout << "Graph type is " << typeG << ", hence it is an Directed Graph" << endl;
-		runAlgorithms(dgraph);
-	    }
+	    cin >> typeG;
+        switch (typeG) {
+            case 1:
+                TesterrunAlgorithms(ugraph);
+                break;
+            case 2:
+                TesterrunAlgorithms(dgraph);
+                break;
+            case 3:
+                ParserrunAlgorithms(ugraph);
+                break;
+            case 4:
+                ParserrunAlgorithms(dgraph);
+                break;
+            default:
+                break;
+        	}
+	   
 	}
 }
 
