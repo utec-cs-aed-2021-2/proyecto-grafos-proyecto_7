@@ -105,7 +105,7 @@ class UnDirectedGraph : public Graph<TV, TE>{
             if (!findById(start))
                 throw std::invalid_argument("invalid start node\n");
 
-            auto aristas = this->vertexes[start]->edges; //std::list<Edge<TV, TE>*> //no se si el tipo es eso, falta probar
+            auto aristas = this->vertexes[start]->edges;
             for (auto it : aristas){
                 //revisa cada par de vertices -> se puede verificar solo la componente[1]
                 if (it->edgeVertexes[0] == this->vertexes[end] || it->edgeVertexes[1] == this->vertexes[end])
