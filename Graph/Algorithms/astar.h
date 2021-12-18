@@ -1,5 +1,3 @@
-#include "../UndirectedGraph.h"
-
 #ifndef ASTAR_H
 #define ASTAR_H
 
