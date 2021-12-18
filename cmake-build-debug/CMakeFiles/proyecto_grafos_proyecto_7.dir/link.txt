@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/proyecto_grafos_proyecto_7.dir/Parser/parser.cpp.o CMakeFiles/proyecto_grafos_proyecto_7.dir/main.cpp.o -o proyecto_grafos_proyecto_7 

@@ -4,8 +4,19 @@
 #include <list>
 #include <vector>
 #include <unordered_map>
+#include <map>
+#include <iostream>
+#include <stack>
+#include <queue>
+#include <string>
+#include <iterator>
+#include <algorithm>
+#include "../Parser/nlohmann/json.hpp"
 
+using json = nlohmann::json;
 using namespace std;
+
+const int INF = 9999999;
 
 template<typename TV, typename TE>
 struct Edge;
@@ -16,41 +27,127 @@ struct Vertex;
 template<typename TV, typename TE>
 class Graph;
 
+template<typename TV, typename TE>
+using umap_it = typename unordered_map<string, Vertex<TV, TE>*>::iterator;
+
 //////////////////////////////////////////////////////
 
 template<typename TV, typename TE>
 struct Edge {
-    Vertex<TV, TE>* vertexes[2];
+    Vertex<TV, TE>* edgeVertexes[2];    
     TE weight;
+
+    Edge() = default;
+    Edge(Vertex<TV, TE>* source, Vertex<TV, TE>* destiny, TE w)
+    {
+        this->edgeVertexes[0] = source;
+        this->edgeVertexes[1] = destiny;
+        this->weight = w;
+    }
 };
+
+template<typename TV, typename TE>
+ostream& operator << (ostream& os, Edge<TV, TE>* ed)
+{
+    os << " ("<< ed->edgeVertexes[0]->data << " " << ed->weight << " " << ed->edgeVertexes[1]->data << ")";
+    return os;
+}
 
 template<typename TV, typename TE>
 struct Vertex {
     TV data;
+    string id,city,DBTZ,name,pais,IAT,ICAO,ID_aereopuerto;
+    double longitud,latitud;
+    int timezone,DST=0;
+    vector<string> destinos;
     std::list<Edge<TV, TE>*> edges;
+    Vertex() = default;
+    Vertex(TV d, string id_){
+        data = d;
+        id = id_;
+    };
+
+    // add an edge in a graph 
+    void addEdge(Vertex<TV, TE>* source, Vertex<TV, TE>* destiny, TE w)
+    {   
+        edges.push_back(new Edge<TV, TE>(source, destiny, w));
+    }
+    // add an edge in a graph (arg source is "this" pointer by default)
+    void addEdge(Vertex<TV, TE>* destiny, TE w)
+    {
+        edges.push_back(new Edge<TV, TE>(this, destiny, w));
+    }
+    // std :: emplace_back () could be used, but to make it easier to read and 
+    // initialize in heap, we'll use std :: push_back ()
+
+    TE operator[](Vertex<TV, TE>* ver)
+    {
+        if (this == ver)
+            return 0;
+        for (const auto& ed : edges)
+        {
+            if (ver == ed->edgeVertexes[1])
+                return ed->weight;
+        }
+        return INF;
+    }
 };
+
+template<typename TV, typename TE> ostream& operator<<(ostream& os, Vertex<TV, TE>* vertex)
+{
+    os << vertex->id << " "; return os;
+}
 
 template<typename TV, typename TE>
 class Graph{
-private:    
+    template<typename TV1, typename TE1> friend class DFS;
+    template<typename TV2, typename TE2> friend class BFS;
+    template<typename TV3, typename TE3> friend class Kruskal;
+    template<typename TV4, typename TE4> friend class Prim;
+    template<typename TV5, typename TE5> friend class AStar;
+    template<typename TV6, typename TE6> friend class Dijkstra;
+    template<typename TV7, typename TE7> friend class BestBFS;
+    template<typename TV8, typename TE8> friend class BellmanFord;
+    template<typename TV9, typename TE9> friend class FloydWarshall;
+protected:
     std::unordered_map<string, Vertex<TV, TE>*>  vertexes;
-    
+    int numEdges = 0;
+    int numVertexes = 0;
+    json file;
 public:
-    bool insertVertex(string id, TV vertex) = 0;   
-    bool createEdge(string id1, string id2, TE w) = 0;     
-    bool deleteVertex(string id) = 0;     
-    bool deleteEdge(string id) = 0;   
-    TE &operator()(string start, string end)= 0;  
-    float density() = 0;
-    bool isDense(float threshold = 0.5) = 0;
-    bool isConnected()= 0;
-    bool isStronglyConnected() throw();
-    bool empty();
-    void clear()= 0;  
+    virtual bool insertVertex(string id, TV vertex) = 0;   
+    virtual bool createEdge(string id1, string id2, TE w) = 0;     
+    virtual bool deleteVertex(string id) = 0;     
+    virtual bool deleteEdge(string id1, string id2) = 0;   
+    virtual TE &operator()(string start, string end)= 0;  
+    virtual float density() = 0;
+    virtual bool isDense(float threshold = 0.5) = 0;
+    virtual bool isConnected() = 0;
+    virtual bool isStronglyConnected() = 0;
+    virtual bool empty() = 0;
+    virtual void clear() = 0;  
       
-    void displayVertex(string id)= 0;
-    bool findById(string id) = 0;
-    void display() = 0;
+    virtual void displayVertex(string id) = 0;
+    virtual bool findById(string id) = 0;
+    virtual void display() = 0;
+    virtual void adjList() = 0;
+    ~Graph() = default;
+
+    void addVertex(string id, Vertex<TV, TE>* ver)
+    {
+        this->vertexes[id] = ver;
+        this->numVertexes++;
+    }
+    void clearJSON()
+    {
+
+    }   // Clears parser saved atributes
+
+    void readJSON()
+    {
+        std::ifstream i("../Parser/Data/pe.json");
+        i >> this->file;
+    }   // Parses JSON file and saves data into class
 };
 
 #endif
