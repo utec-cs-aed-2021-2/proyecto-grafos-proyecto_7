@@ -159,10 +159,10 @@ public:
             actualizar_costos(nodo_menor);
         }
         while (!q.empty()){
-            cout << q.top() <<"-> ";
+            cout << "Pasamos por el nodo "<<q.top() << "con peso acumulado de " << this->costo[q.top()]<<endl;
             q.pop();
         }
-        cout << "end";
+        cout << "Final" <<endl;
 
     }
 };
